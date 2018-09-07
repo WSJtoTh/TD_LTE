@@ -502,7 +502,7 @@ def login(request):
                         Userlist2.objects.create(username=Regusername, password=Regpassword, type=1, state=0)
                     else:
                         Userlist2.objects.create(username=Regusername, password=Regpassword, type=0, state=0)
-                    return render_to_response("first.html", {"logResult": "注册成功"})
+                    return render_to_response("first.html", {"regResult": "注册成功"})
     return render_to_response("first.html")
 
 
