@@ -49,7 +49,7 @@ def upload_tbCell(request):
         for chunk in obj.chunks():
             print(type(chunk))
             print(chunk)
-
+###############
     return render_to_response("utest.html")
 
 
