@@ -69,15 +69,17 @@
 
 	<div id="info">
 		<div class="chooseTable">
+            <form action="/download/" method="post">
+                <label>请选择需要导出的表格：</label>
+                <input type="text" id="txt_ide" list="ide" name="down_file"/>
+                <datalist id="ide">
+                    <option value="tbATUHandOver" />
+                    <option value="tbOptCell" />
+                    <option value="tbAdjCell" />
+                </datalist>
+                <button type="submit" id="okTable" onclick="getTable()">确认</button>
+            </form>
 
-			<label>请选择需要导出的表格：</label> 
-			<input type="text" id="txt_ide" list="ide" /> 
-			<datalist id="ide"> 
-				<option value="tbATUHandOver" /> 
-				<option value="tbOptCell" /> 
-				<option value="tbAdjCell" /> 
-			</datalist>
-			<button id="okTable" onclick="getTable()">确认</button>
 		</div>	
 		<div class="save">
 	<!--	<input type="text" name="src" id="fileSrc" placeholder="文件路径...">
