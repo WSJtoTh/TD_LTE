@@ -40,15 +40,170 @@ print("开始了")
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
+
 def upload_tbCell(request):
     if request.method == "POST":
-        obj = request.FILES.get("up_file")
-        print(type(obj))
-        print(obj)
-        print(obj.name)
-        for chunk in obj.chunks():
-            print(type(chunk))
-            print(chunk)
+        file_obj = request.FILES["up_file"]
+        type_excel = file_obj.name.split('.')[1]
+        print(type_excel)
+        name_excel = file_obj.name.split('.')[0]
+        print(file_obj.name)
+        if 'xlsx' == type_excel:
+            if 'tbOptCell' == name_excel:
+                data = xlrd.open_workbook(filename=None, file_contents=file_obj.read())
+                print("读取文件结束，准备导入！")
+                table = data.sheet_by_index(0)
+                successLines = 1
+                workList = []
+                failLines = 0
+                for line in range(1, table.nrows):
+                    row = table.row_values(line)
+                    if row:  # 检查是否为空行
+                        if type(row[0]) == str and type(row[1]) == float and row[1] % 1 == 0 and type(row[2]) == str:
+                            workList.append(Tboptcell(sector_id=row[0], earfcn=row[1], cell_type=row[2]))
+                        else:
+                            failLines = failLines + 1
+                            print(successLines + failLines)
+                            print("有数据类型不对")
+                    else:
+                        failLines = failLines + 1
+                        print("出现空行！")
+                    successLines = successLines + 1
+                    if successLines % 500 == 0 or successLines + failLines >= table.nrows:  # 每五行进行一次插入
+                        print("已插入到")
+                        print(successLines)
+                        print(type(row[1]))
+                        # print("已插入到第n行")
+                        Tboptcell.objects.bulk_create(workList)
+                        workList = []
+                return HttpResponse("tbOptCell Upload Success!")
+            elif 'tbKPI' == name_excel:
+                data = xlrd.open_workbook(filename=None, file_contents=file_obj.read())
+                print("读取文件结束，准备导入！")
+                table = data.sheet_by_index(0)
+                successLines = 1
+                workList = []
+                failLines = 0
+                print(table.nrows)
+                for line in range(1, table.nrows):
+                    row = table.row_values(line)
+                    if row:  # 检查是否为空行
+                        if (type(row[1]) == float and row[1] % 1 == 0
+                                and type(row[2]) == str
+                                and type(row[3]) == str
+                                and type(row[4]) == str
+                                and type(row[5]) == float and row[6] % 1 == 0
+                                and type(row[6]) == float and row[6] % 1 == 0
+                                and type(row[7]) == float
+                                and type(row[8]) == float and row[8] % 1 == 0
+                                and type(row[9]) == float and row[9] % 1 == 0
+                                and type(row[10]) == float
+                                and type(row[11]) == float and row[11] % 1 == 0
+                                and type(row[12]) == float and row[12] % 1 == 0
+                                and type(row[13]) == float
+                                and type(row[14]) == float
+                                and type(row[15]) == float and row[15] % 1 == 0
+                                and type(row[16]) == float and row[16] % 1 == 0
+                                and type(row[17]) == float and row[17] % 1 == 0
+                                and type(row[18]) == float
+                                and type(row[19]) == float and row[19] % 1 == 0
+                                and type(row[20]) == float and row[20] % 1 == 0
+                                and type(row[21]) == float and row[21] % 1 == 0
+                                and type(row[22]) == float and row[22] % 1 == 0
+                                and type(row[23]) == float and row[23] % 1 == 0
+                                and type(row[24]) == float and row[24] % 1 == 0
+                                and type(row[25]) == float and row[25] % 1 == 0
+                                and type(row[26]) == float and row[26] % 1 == 0
+                                and type(row[27]) == float
+                                and type(row[28]) == float
+                                and type(row[29]) == float
+                                and type(row[30]) == float
+                                and type(row[31]) == float
+                                and type(row[32]) == float and row[32] % 1 == 0
+                                and type(row[33]) == float and row[33] % 1 == 0
+                                and type(row[34]) == float and row[34] % 1 == 0
+                                and type(row[35]) == float
+                                and type(row[36]) == float and row[36] % 1 == 0
+                                and type(row[37]) == float and row[37] % 1 == 0
+                                and type(row[38]) == float and row[38] % 1 == 0
+                                and type(row[39]) == float and row[39] % 1 == 0
+                                and type(row[40]) == float and row[40] % 1 == 0
+                                and type(row[41]) == float and row[41] % 1 == 0
+                        ):
+                            # date = d
+                            print(type(row[0]))
+                            print(row[0])
+                            date = date_transform(row[0])
+                            workList.append(Tbkpi(starttime=date, turnround=row[1], name=row[2], cell_multi=row[3],
+                                                  cell=row[4], suc_time=row[5], req_time=row[6], rrc_suc_rate=row[7],
+                                                  suc_total=row[8], try_total=row[9], e_rab_suc_rate=row[10],
+                                                  enodeb_exception=row[11],
+                                                  cell_exception=row[12], e_rab_offline=row[13], ay=row[14],
+                                                  enodeb_release_time=row[15],
+                                                  ue_context_exception_time=row[16], ue_context_suc_time=row[17],
+                                                  wifi_offline_rate=row[18], t_field=row[19],
+                                                  u_field=row[20], v_field=row[21], w_field=row[22], x_field=row[23],
+                                                  y_field=row[24], z_field=row[25], aa_field=row[26], ab_field=row[27],
+                                                  ac_field=row[28], ad_field=row[29], ae_field=row[30],
+                                                  af_field=row[31], ag_field=row[32], ah_field=row[33],
+                                                  ai_field=row[34], aj_field=row[35],
+                                                  ak_field=row[36], al_field=row[37],
+                                                  am_field=row[38], an_field=row[39],
+                                                  ao_field=row[40], ap_field=row[41],
+                                                  ))
+                            successLines = successLines + 1
+                        else:
+                            failLines = failLines + 1
+                            print("有数据类型不对")
+                    else:
+                        failLines = failLines + 1
+                        print("出现空行！")
+
+                    if successLines % 500 == 0 or successLines + failLines >= table.nrows:  # 每五行进行一次插入
+                        print("已插入到")
+                        print(successLines)
+                        print("fail")
+                        print(failLines)
+                        print(type(row[1]))
+                        # print("已插入到第n行")
+                        Tbkpi.objects.bulk_create(workList)
+                        workList = []
+                return HttpResponse("tbKpi Upload Success!")
+        elif 'csv' == type_excel:
+            print("csv")
+            if 'tbMROData' == name_excel:
+                print("打开了MRO")
+                table = open(file=None, file_contents=file_obj.read())
+                print("读取文件结束，准备导入！")
+                successLines = 1
+                workList = []
+                next(table)
+                failLines = 0
+                time1 = time.time()
+                for line in table:
+                    row = line.split(",")
+                    row[3:7] = list(map(eval, row[3:7]))  # 使用map和eval函数批量将字符串转化成整型或浮点型
+                    workList.append(Tbmrodata(timestamp=row[0], servingsector=row[1], interferingsector=row[2],
+                                              ltescrsrp=row[3], ltencrsrp=row[4], ltencearfcn=row[5],
+                                              ltencpci=row[6])
+                                    )
+                    successLines = successLines + 1
+                    if successLines % 50000 == 0:  # 每五行进行一次插入
+                        time2 = time.time()
+                        print("绑定列属性用时")
+                        print(time2 - time1)
+                        print("已插入到")
+                        print(successLines)
+                        Tbmrodata.objects.bulk_create(workList)
+                        time3 = time.time()
+                        print("写入数据库用时")
+                        print(time3 - time2)
+                        workList = []
+                        time1 = time.time()
+                Tbmrodata.objects.bulk_create(workList)
+                return HttpResponse("tbMROData Upload Success!")
+
+
 ###############
     return render_to_response("utest.html")
 
