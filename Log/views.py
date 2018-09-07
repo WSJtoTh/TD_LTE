@@ -7,6 +7,8 @@ from Log.models import Tboptcell
 from Log.models import Tbprb
 from Log.models import Tbmrodata
 from Log.models import Userlist2
+from Log.models import Tbatuhandover
+from Log.models import Tbadjcell
 import time
 import datetime
 import xlrd
@@ -20,6 +22,8 @@ import csv
 from io import StringIO
 import json
 # Create your views here.
+
+
 class UserForm(forms.Form):
     username = forms.CharField(max_length=50)
     password = forms.CharField(max_length=50)
@@ -28,13 +32,19 @@ class UserForm(forms.Form):
 class ChooseForm(forms.Form):
     table_choose = forms.CharField(max_length=10)
 
+
 class ChooseForm1(forms.Form):
     table_choose1 = forms.CharField(max_length=10)
+
 
 class RegUserForm(forms.Form):
     Regusername = forms.CharField(max_length=50)
     Regpassword = forms.CharField(max_length=50)
     user_type = forms.CharField(max_length=10)
+
+
+class DownloadForm(forms.Form):
+    down_file = forms.CharField(max_length=255)
 
 
 print("开始了")
@@ -837,7 +847,6 @@ def import_table_from_excel(request):
 
 
 def login(request):
-    result = True
     if request.method == "POST":
         uf = UserForm(request.POST)
         #print(uf)
@@ -920,17 +929,26 @@ def datetime_transform(raw_datetime):
 
 #数据导出
 
-class DownloadForm(forms.Form):
-    down_file = forms.CharField(max_length=255)
 
 
 def download_table(request):
     if request.method == "POST":
         df = DownloadForm(request.POST)
-        down_file = df.cleaned_data["down_file"]
-        if down_file == 'tbOptCell':
-            tb_opt = Tboptcell.objects.all()
-            return render_to_response("download.html", {"table": tb_opt})
+        if df.is_valid():
+            down_file = df.cleaned_data["down_file"]
+            if down_file == 'tbOptCell':
+                tb_Opt = Tboptcell.objects.all()
+                print(tb_Opt)
+                return render_to_response("download.html", {"Opt_table": tb_Opt})
+            elif down_file == 'tbATUHandOver':
+                tb_ATU = Tbatuhandover.objects.all()
+                print(tb_ATU)
+                return render_to_response("download.html", {"ATU_table": tb_ATU})
+            elif down_file == 'tbAdjCell':
+                tb_Adj = Tbadjcell.objects.all()
+                print(tb_Adj)
+                return render_to_response("download.html", {"Adj_table": tb_Adj})
+
     return render_to_response("download.html")
 
 
