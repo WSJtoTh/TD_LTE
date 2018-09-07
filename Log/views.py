@@ -523,7 +523,7 @@ def login(request):
 
 
 
-    return render_to_response("first.html", {"logResult": True})
+    return render_to_response("first.html")
 
 def show_data(request):
     return render_to_response("stest.html",)

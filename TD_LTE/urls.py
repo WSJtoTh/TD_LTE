@@ -19,7 +19,7 @@ from django.conf.urls import url
 from Log import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^utest/', views.upload_tbCell),
+    url(r'^test/', views.import_table_from_excel),
     #url(r'^stest/', show_data),
     url(r'^login/', views.login, name="loginIndex")
     #######################
