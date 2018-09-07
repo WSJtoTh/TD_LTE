@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>数据展示</title>
+    {% for data in table  %}
+        {{ data.sector_id }} {{ data.earfcn }} {{ data.cell_type }}<br/>
+    {% empty %}
+        <p>表格中没有数据</p>
+    {% endfor %}
+</head>
+<body>
+
+</body>
+</html>
