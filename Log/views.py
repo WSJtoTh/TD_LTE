@@ -16,6 +16,9 @@ from django import forms
 from Log.models import Tbcell
 import os
 from xlrd import xldate_as_tuple
+import csv
+from io import StringIO
+import json
 # Create your views here.
 class UserForm(forms.Form):
     username = forms.CharField(max_length=50)
@@ -173,15 +176,23 @@ def upload_tbCell(request):
             print("csv")
             if 'tbMROData' == name_excel:
                 print("打开了MRO")
-                table = open(file=None, file_contents=file_obj.read())
+                temp_data = file_obj.read().decode('ascii', 'ignore')
+                print(temp_data)
+                print(type(temp_data))
+                dataFile = StringIO(temp_data)
+                table = csv.reader(dataFile)
                 print("读取文件结束，准备导入！")
+                print(type(table))
+                print(table)
                 successLines = 1
                 workList = []
                 next(table)
                 failLines = 0
                 time1 = time.time()
-                for line in table:
-                    row = line.split(",")
+                for row in table:
+                    #print(line)
+                    #print(type(line ))
+                    #row = line.split(",")
                     row[3:7] = list(map(eval, row[3:7]))  # 使用map和eval函数批量将字符串转化成整型或浮点型
                     workList.append(Tbmrodata(timestamp=row[0], servingsector=row[1], interferingsector=row[2],
                                               ltescrsrp=row[3], ltencrsrp=row[4], ltencearfcn=row[5],
