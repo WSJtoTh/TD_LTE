@@ -16,35 +16,48 @@
 <script>
 
 	$(function(){
-		var timer = function(){};
+		var
+		timer
+		=
+		function(){};
 
-		$(".nav>li").hover(function(){
-			clearTimeout(timer);
-			$(this).children('ul').stop(true,true).show();
-		},function(){
-			var self = $(this);
-			timer = setTimeout(function(){
-				self.children('ul').stop(true,true).hide();	
-			}, 100);
-		});
+	$(".nav>li").hover(function(){
+	clearTimeout(timer);
+	$(this).children('ul').stop(true,true).show();
+	}, function(){
+	var self = $(this);
+	timer = setTimeout(function(){
+	self.children('ul').stop(true, true).hide();
+	}, 100);
+	});
 	});
 
-	 setInterval(function(ret){
-        $.get("{% url 'barIndex' %}", function(ret){
-           // $('#bar_value').html(ret);
-            var pg=document.getElementById("probar");
 
-             pg.style.width = ret*100+"%";
-              pg.innerHTML = pg.style.width;
-        })
+	function showProgress(){
+	var pgbar=document.getElementById("OurProgress");
+	pgbar.style.opacity="1";
+	var interval= setInterval(function(ret){
+	$.get("{% url 'barIndex' %}", function(ret){
+	// $('#bar_value').html(ret);
+	var pg=document.getElementById("probar");
+	if(ret==1)
+		{	//alert("上传成功！");
+			pgbar.style.opacity="0";
+
+			clearInterval(interval);
+		}
+	else{
+			pg.style.width = ret*100+"%";
+			pg.innerHTML = pg.style.width;
+		}
+	})
 
 
-      /*  var i=5;//获取导成功条数
+	/*  var i=5;//获取导成功条数
         var total=20;//从后台获取总条数
         var bili=(i/total)*100;*/
-
-
-},2000)
+	}, 2000)
+	}
 </script>
 <body>
 	
@@ -110,13 +123,13 @@
 
 				<input id="file-0" class="file" type="file" multiple data-min-file-count="1" name="up_file">
 				<br>
-				<button type="submit" class="btn btn-primary" onclick="getSource()">上传</button>
+				<button type="submit" class="btn btn-primary" onclick="showProgress()">上传</button>
 				<button type="reset" class="btn btn-default">取消</button>
 			</form>
 		</div>
 		<br>
 		
-		<div class="progress progress-striped active">
+		<div class="progress progress-striped active" id="OurProgress" style="opacity:0">
 			<div class="progress-bar progress-bar-success" role="progressbar"
 			aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" id="probar" style="width: 0%" 
 			>
