@@ -920,6 +920,19 @@ def datetime_transform(raw_datetime):
 
 #数据导出
 
+class DownloadForm(forms.Form):
+    down_file = forms.CharField(max_length=255)
+
+
+def download_table(request):
+    if request.method == "POST":
+        df = DownloadForm(request.POST)
+        down_file = df.cleaned_data["down_file"]
+        if down_file == 'tbOptCell':
+            tb_opt = Tboptcell.objects.all()
+            return render_to_response("download.html", {"table": tb_opt})
+    return render_to_response("download.html")
+
 
 def download_data(request):
     if request.method == "POST":
