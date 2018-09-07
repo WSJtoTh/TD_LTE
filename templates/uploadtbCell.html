@@ -28,6 +28,23 @@
 			}, 100);
 		});
 	});
+
+	 setInterval(function(ret){
+        $.get("{% url 'barIndex' %}", function(ret){
+           // $('#bar_value').html(ret);
+            var pg=document.getElementById("probar");
+
+             pg.style.width = ret*100+"%";
+              pg.innerHTML = pg.style.width;
+        })
+
+
+      /*  var i=5;//获取导成功条数
+        var total=20;//从后台获取总条数
+        var bili=(i/total)*100;*/
+
+
+},2000)
 </script>
 <body>
 	

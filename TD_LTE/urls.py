@@ -23,7 +23,8 @@ urlpatterns = [
     url(r'^uploadTbCell/', views.upload_tbCell, name="upTbCellIndex"),
     #url(r'^stest/', show_data),
     url(r'^login/', views.login, name="loginIndex"),
-    url(r'^user/', views.user, name="userIndex")
+    url(r'^user/', views.user, name="userIndex"),
+    url(r'^bar/', views.progress_bar, name="barIndex")
     #######################
     #url(r'^test/', import_table_from_excel),
 ]

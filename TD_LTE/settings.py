@@ -131,9 +131,3 @@ USE_TZ = False      #??????????
 
 STATIC_URL = '/static/'
 
-
-FILE_UPLOAD_HANDLERS = ('uploadprogresscachedhandler.UploadProgressCachedHandler', ) \
-+ global_settings.FILE_UPLOAD_HANDLERS
-
-CACHE_BACKEND = 'memcached://127.0.0.1:11211/'
-

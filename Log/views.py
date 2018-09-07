@@ -39,18 +39,23 @@ class RegUserForm(forms.Form):
 
 print("开始了")
 
+global bar_value
+bar_value = 0.0
+
 ##gengxinchangshi
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 
 def upload_tbCell(request):
+    global bar_value
     if request.method == "POST":
         file_obj = request.FILES["up_file"]
         type_excel = file_obj.name.split('.')[1]
         print(type_excel)
         name_excel = file_obj.name.split('.')[0]
         print(file_obj.name)
+        bar_value = 0.0
         if 'xlsx' == type_excel:
             data = xlrd.open_workbook(filename=None, file_contents=file_obj.read())
             print("读取文件结束，准备导入！")
@@ -72,13 +77,17 @@ def upload_tbCell(request):
                         failLines = failLines + 1
                         print("出现空行！")
                     successLines = successLines + 1
-                    if successLines % 500 == 0 or successLines + failLines >= table.nrows:  # 每五行进行一次插入
+                    if successLines % 500 == 0:  # 每五行进行一次插入
+                        bar_value = successLines/(successLines+failLines)
+                        print("上传进度：")
+                        print(bar_value)
                         print("已插入到")
                         print(successLines)
                         print(type(row[1]))
                         # print("已插入到第n行")
                         Tboptcell.objects.bulk_create(workList)
                         workList = []
+                Tboptcell.objects.bulk_create(workList)
             elif 'tbKPI' == name_excel:
                 print(table.nrows)
                 for line in range(1, table.nrows):
@@ -156,6 +165,7 @@ def upload_tbCell(request):
                         print("出现空行！")
 
                     if successLines % 500 == 0 or successLines + failLines >= table.nrows:  # 每五行进行一次插入
+                        bar_value = successLines / (successLines + failLines)
                         print("已插入到")
                         print(successLines)
                         print("fail")
@@ -207,6 +217,9 @@ def upload_tbCell(request):
                         print("出现空行！")
                     successLines = successLines + 1
                     if successLines % 1000 == 0 or successLines + failLines >= table.nrows:  # 每五行进行一次插入
+                        bar_value = successLines / table.nrows
+                        print("上传进度：")
+                        print(bar_value)
                         time2 = time.time()
                         print("success:")
                         print(successLines)
@@ -306,6 +319,7 @@ def upload_tbCell(request):
                         print("出现空行！")
 
                     if successLines % 10000 == 0:  # 每五行进行一次插入
+                        bar_value = successLines / (successLines + failLines)
                         time2 = time.time()
                         print("绑定列属性用时")
                         print(time2 - time1)
@@ -332,6 +346,7 @@ def upload_tbCell(request):
                         print("出现空行！")
                     successLines = successLines + 1
                     if successLines % 500 == 0 or successLines + failLines >= table.nrows:  # 每五行进行一次插入
+                        bar_value = successLines / (successLines + failLines)
                         print("已插入到")
                         print(successLines)
                         print(type(row[0]))
@@ -366,6 +381,7 @@ def upload_tbCell(request):
                                     )
                     successLines = successLines + 1
                     if successLines % 50000 == 0:  # 每五行进行一次插入
+                        bar_value = successLines / (successLines + failLines)
                         time2 = time.time()
                         print("绑定列属性用时")
                         print(time2 - time1)
@@ -380,6 +396,7 @@ def upload_tbCell(request):
                 Tbmrodata.objects.bulk_create(workList)
         else:
             return render_to_response("uploadtbCell.html")
+        bar_value = 1.0
         return render_to_response("uploadtbCell.html")
     return render_to_response("uploadtbCell.html")
 
@@ -937,4 +954,8 @@ def norm(a, sigma, x):
     u = (x - a) / sigma
     return (st_norm(u))
 
+def progress_bar(request):
+    global bar_value
+    print("收到请求")
+    return HttpResponse(bar_value)
 
