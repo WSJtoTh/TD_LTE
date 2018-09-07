@@ -84,8 +84,12 @@
 		<div class="save">
 	<!--	<input type="text" name="src" id="fileSrc" placeholder="文件路径...">
 		<input type="submit" name="saveButton" id="saveButton" value="保存">-->
+        {% for data in Opt_table  %}
+            {{ data.sector_id }} {{ data.earfcn }} {{ data.cell_type }}<br/>
+        {% empty %}
+            <p>表格中没有数据</p>
+        {% endfor %}
 
-		
 		<div class="preview">
 
 			<div class="box">
