@@ -44,7 +44,7 @@
 
 				<li><a href="User.html">数据管理</a>
 					<ul class="sub-nav">
-						<li><a href="uploadtbCell.html">数据导入</a></li>
+						<li><a href={% url 'upTbCellIndex' %}>数据导入</a></li>
 						<li><a href="download.html">数据导出</a></li>
 
 					</ul>
@@ -89,9 +89,9 @@
 			<div class="fileTitle">
 				<h3>tbCell</h3>
 			</div>
-			<form enctype="multipart/form-data">
+			<form action="/uploadTbCell/" method="post" enctype="multipart/form-data">
 
-				<input id="file-0" class="file" type="file" multiple data-min-file-count="1">
+				<input id="file-0" class="file" type="file" multiple data-min-file-count="1" name="up_file">
 				<br>
 				<button type="submit" class="btn btn-primary" onclick="getSource()">上传</button>
 				<button type="reset" class="btn btn-default">取消</button>

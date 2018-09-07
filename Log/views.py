@@ -216,7 +216,7 @@ def upload_tbCell(request):
 
 
 ###############
-    return render_to_response("utest.html")
+    return render_to_response("uploadtbCell.html")
 
 
 def import_table_from_excel(request):
@@ -691,8 +691,13 @@ def login(request):
 
     return render_to_response("first.html")
 
-def show_data(request):
-    return render_to_response("stest.html",)
+
+def user(request):
+    return render_to_response("User.html")
+
+def uploadTbCell(request):
+    return render_to_response("uploadtbCell.html")
+
 
 def date_transform(raw_date):
     temp1 = raw_date.split()
