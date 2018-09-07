@@ -36,6 +36,7 @@ class RegUserForm(forms.Form):
 
 print("开始了")
 
+##gengxinchangshi
 
 def import_table_from_excel(request):
     if request.method == "POST":
