@@ -14,7 +14,7 @@ from datetime import datetime
 from xlrd import xldate_as_tuple
 from django import forms
 from Log.models import Tbcell
-
+import os
 from xlrd import xldate_as_tuple
 # Create your views here.
 class UserForm(forms.Form):
@@ -37,6 +37,21 @@ class RegUserForm(forms.Form):
 print("开始了")
 
 ##gengxinchangshi
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+
+def upload_tbCell(request):
+    if request.method == "POST":
+        obj = request.FILES.get("up_file")
+        print(type(obj))
+        print(obj)
+        print(obj.name)
+        for chunk in obj.chunks():
+            print(type(chunk))
+            print(chunk)
+
+    return render_to_response("utest.html")
+
 
 def import_table_from_excel(request):
     if request.method == "POST":
