@@ -55,15 +55,21 @@
 			<input id="ord" type="radio"  name="type" value="Ord" />Ordinary
 		</div>
 		<input type="submit" name="RegSub" value="注册" onclick="submitRegist()">
-    </form>
+
 		
 		
-		<a href="#" id="close" onclick="closeRegDialog()">X</a>
+		<a href="#" id="closeReg" onclick="closeRegDialog()">X</a>
 	</div>
+    </form>
 <script>
 
     {% if  logResult  == "NO" %}
-        alert("用户名或密码错误！")
+        alert("用户名或密码错误！");
+    {% endif %}
+    {% if regResult == "用户名已存在" %}
+    	alert("用户名已存在");
+    {% elif regResult == "注册成功" %}
+        alert("注册成功");
     {% endif %}
 
 </script>
