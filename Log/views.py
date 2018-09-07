@@ -52,13 +52,13 @@ def upload_tbCell(request):
         name_excel = file_obj.name.split('.')[0]
         print(file_obj.name)
         if 'xlsx' == type_excel:
+            data = xlrd.open_workbook(filename=None, file_contents=file_obj.read())
+            print("读取文件结束，准备导入！")
+            table = data.sheet_by_index(0)
+            successLines = 1
+            workList = []
+            failLines = 0
             if 'tbOptCell' == name_excel:
-                data = xlrd.open_workbook(filename=None, file_contents=file_obj.read())
-                print("读取文件结束，准备导入！")
-                table = data.sheet_by_index(0)
-                successLines = 1
-                workList = []
-                failLines = 0
                 for line in range(1, table.nrows):
                     row = table.row_values(line)
                     if row:  # 检查是否为空行
@@ -79,14 +79,7 @@ def upload_tbCell(request):
                         # print("已插入到第n行")
                         Tboptcell.objects.bulk_create(workList)
                         workList = []
-                return HttpResponse("tbOptCell Upload Success!")
             elif 'tbKPI' == name_excel:
-                data = xlrd.open_workbook(filename=None, file_contents=file_obj.read())
-                print("读取文件结束，准备导入！")
-                table = data.sheet_by_index(0)
-                successLines = 1
-                workList = []
-                failLines = 0
                 print(table.nrows)
                 for line in range(1, table.nrows):
                     row = table.row_values(line)
@@ -171,7 +164,180 @@ def upload_tbCell(request):
                         # print("已插入到第n行")
                         Tbkpi.objects.bulk_create(workList)
                         workList = []
-                return HttpResponse("tbKpi Upload Success!")
+            elif 'tbCell' == name_excel:
+                time1 = time.time()
+                for line in range(1, table.nrows):
+                    row = table.row_values(line)
+                    if row:  # 检查是否为空行
+                        if (type(row[0]) == str and type(row[1]) == str and type(row[2]) == str
+                                and type(row[3]) == float and row[3] % 1 == 0 and type(row[4]) == str
+                                and type(row[5]) == float and row[5] % 1 == 0
+                                and type(row[6]) == float and row[6] % 1 == 0 and type(row[7]) == float and row[
+                                    7] % 1 == 0
+                                and type(row[8]) == float and row[8] % 1 == 0
+                                and type(row[9]) == float and row[9] % 1 == 0 and type(row[10]) == str
+                                and type(row[11]) == float
+                                and type(row[12]) == float and type(row[13]) == str and type(row[14]) == float
+                                and type(row[15]) == float and type(row[16]) == float and type(row[17]) == float
+                                and type(row[18]) == float):  # 判断用户名是否为字符串
+                            workList.append(Tbcell(city=row[0],
+                                                   sector_id=row[1],
+                                                   sector_name=row[2],
+                                                   enodebid=row[3],
+                                                   enodeb_name=row[4],
+                                                   earfcn=row[5],
+                                                   pci=row[6],
+                                                   pss=row[7],
+                                                   sss=row[8],
+                                                   tac=row[9],
+                                                   vendor=row[10],
+                                                   longitude=row[11],
+                                                   latitude=row[12],
+                                                   style=row[13],
+                                                   azimuth=row[14],
+                                                   height=row[15],
+                                                   electtilt=row[16],
+                                                   mechtilt=row[17],
+                                                   totletilt=row[18]))
+                        else:
+                            failLines = failLines + 1
+                            print("有数据类型不对")
+                    else:
+                        failLines = failLines + 1
+                        print("出现空行！")
+                    successLines = successLines + 1
+                    if successLines % 1000 == 0 or successLines + failLines >= table.nrows:  # 每五行进行一次插入
+                        time2 = time.time()
+                        print("success:")
+                        print(successLines)
+                        print("fail:")
+                        print(failLines)
+                        print(type(row[0]))
+                        # print("已插入到第n行")
+                        Tbcell.objects.bulk_create(workList)
+                        workList = []
+            elif 'tbPRB' == name_excel:
+                for line in range(1, table.nrows):
+                    row = table.row_values(line)
+                    if row:  # 检查是否为空行
+                        if (type(row[1]) == float and row[1] % 1 == 0
+                            and type(row[2]) == str
+                            and type(row[3]) == str
+                            and type(row[4]) == str
+                            and type(row[5]) == float and type(row[6]) == float and type(row[7]) == float
+                            and type(row[8]) == float and type(row[9]) == float and type(row[10]) == float
+                            and type(row[11]) == float and type(row[12]) == float and type(row[13]) == float
+                            and type(row[14]) == float and type(row[15]) == float and type(row[16]) == float
+                            and type(row[17]) == float and type(row[18]) == float and type(row[19]) == float
+                            and type(row[20]) == float and type(row[21]) == float and type(row[22]) == float
+                            and type(row[23]) == float and type(row[24]) == float and type(row[25]) == float
+                            and type(row[26]) == float and type(row[27]) == float and type(row[28]) == float
+                            and type(row[29]) == float and type(row[30]) == float and type(row[31]) == float
+                            and type(row[32]) == float and type(row[33]) == float and type(row[34]) == float
+                            and type(row[35]) == float and type(row[36]) == float and type(row[37]) == float
+                            and type(row[38]) == float and type(row[39]) == float and type(row[40]) == float
+                            and type(row[41]) == float and type(row[42]) == float and type(row[43]) == float
+                            and type(row[44]) == float and type(row[45]) == float and type(row[46]) == float
+                            and type(row[47]) == float and type(row[48]) == float and type(row[49]) == float
+                            and type(row[50]) == float
+                            and type(row[51]) == float and type(row[52]) == float and type(row[53]) == float
+                            and type(row[54]) == float and type(row[55]) == float and type(row[56]) == float
+                            and type(row[57]) == float and type(row[58]) == float and type(row[59]) == float
+                            and type(row[60]) == float
+                            and type(row[61]) == float and type(row[62]) == float and type(row[63]) == float
+                            and type(row[64]) == float and type(row[65]) == float and type(row[66]) == float
+                            and type(row[67]) == float and type(row[68]) == float and type(row[69]) == float
+                            and type(row[70]) == float
+                            and type(row[71]) == float and type(row[72]) == float and type(row[73]) == float
+                            and type(row[74]) == float and type(row[75]) == float and type(row[76]) == float
+                            and type(row[77]) == float and type(row[78]) == float and type(row[79]) == float
+                            and type(row[80]) == float
+                            and type(row[81]) == float and type(row[82]) == float and type(row[83]) == float
+                            and type(row[84]) == float and type(row[85]) == float and type(row[86]) == float
+                            and type(row[87]) == float and type(row[88]) == float and type(row[89]) == float
+                            and type(row[90]) == float
+                            and type(row[91]) == float and type(row[92]) == float and type(row[93]) == float
+                            and type(row[94]) == float and type(row[95]) == float and type(row[96]) == float
+                            and type(row[97]) == float and type(row[98]) == float and type(row[99]) == float
+                            and type(row[100]) == float
+                            and type(row[101]) == float and type(row[102]) == float and type(row[103]) == float
+                            and type(row[104]) == float
+                        ):
+                            #date = d
+                            #print(type(row[0]))
+                            #print(row[0])
+                            #date = datetime_transform(row[0])
+                            date = datetime.strptime(row[0], "%m/%d/%Y %X")
+                            print(date)
+                            workList.append(Tbprb(starttime=date, turnround=row[1],  name=row[2], cell=row[3],
+                                                  cell_name=row[4],
+                                                  prb0=row[5], prb1=row[6], prb2=row[7], prb3=row[8],
+                                                  prb4=row[9], prb5=row[10], prb6=row[11], prb7=row[12],
+                                                  prb8=row[13], prb9=row[14], prb10=row[15], prb11=row[16],
+                                                  prb12=row[17], prb13=row[18], prb14=row[19], prb15=row[20],
+                                                  prb16=row[21], prb17=row[22], prb18=row[23], prb19=row[24],
+                                                  prb20=row[25], prb21=row[26], prb22=row[27], prb23=row[28],
+                                                  prb24=row[29], prb25=row[30], prb26=row[31], prb27=row[32],
+                                                  prb28=row[33], prb29=row[34], prb30=row[35], prb31=row[36],
+                                                  prb32=row[37], prb33=row[38], prb34=row[39], prb35=row[40],
+                                                  prb36=row[41], prb37=row[42], prb38=row[43], prb39=row[44],
+                                                  prb40=row[45], prb41=row[46], prb42=row[47], prb43=row[48],
+                                                  prb44=row[49], prb45=row[50], prb46=row[51], prb47=row[52],
+                                                  prb48=row[53], prb49=row[54], prb50=row[55], prb51=row[56],
+                                                  prb52=row[57], prb53=row[58], prb54=row[59], prb55=row[60],
+                                                  prb56=row[61], prb57=row[62], prb58=row[63], prb59=row[64],
+                                                  prb60=row[65], prb61=row[66], prb62=row[67], prb63=row[68],
+                                                  prb64=row[69], prb65=row[70], prb66=row[71], prb67=row[72],
+                                                  prb68=row[73], prb69=row[74], prb70=row[75], prb71=row[76],
+                                                  prb72=row[77], prb73=row[78], prb74=row[79], prb75=row[80],
+                                                  prb76=row[81], prb77=row[82], prb78=row[83], prb79=row[84],
+                                                  prb80=row[85], prb81=row[86], prb82=row[87], prb83=row[88],
+                                                  prb84=row[89], prb85=row[90], prb86=row[91], prb87=row[92],
+                                                  prb88=row[93], prb89=row[94], prb90=row[95], prb91=row[96],
+                                                  prb92=row[97], prb93=row[98], prb94=row[99], prb95=row[100],
+                                                  prb96=row[101], prb97=row[102], prb98=row[103], prb99=row[104],
+                                                  ))
+                            successLines = successLines + 1
+                        else:
+                            failLines = failLines + 1
+                            print("有数据类型不对")
+                    else:
+                        failLines = failLines + 1
+                        print("出现空行！")
+
+                    if successLines % 10000 == 0:  # 每五行进行一次插入
+                        time2 = time.time()
+                        print("绑定列属性用时")
+                        print(time2 - time1)
+                        print("已插入到")
+                        print(successLines)
+                        # print("已插入到第n行")
+                        Tbprb.objects.bulk_create(workList)
+                        time3 = time.time()
+                        print("写入数据库用时")
+                        print(time3 - time2)
+                        workList = []
+                Tbprb.objects.bulk_create(workList)
+            elif 'tbSecAdjcell' == name_excel:
+                for line in range(1, table.nrows):
+                    row = table.row_values(line)
+                    if row:  # 检查是否为空行
+                        if type(row[0]) == str and type(row[1]) == str:
+                            workList.append(Tbsecadjcell(s_sector_id=row[0], n_sector_id=row[1]))
+                        else:
+                            failLines = failLines + 1
+                            print("有数据类型不对")
+                    else:
+                        failLines = failLines + 1
+                        print("出现空行！")
+                    successLines = successLines + 1
+                    if successLines % 500 == 0 or successLines + failLines >= table.nrows:  # 每五行进行一次插入
+                        print("已插入到")
+                        print(successLines)
+                        print(type(row[0]))
+                        # print("已插入到第n行")
+                        Tbsecadjcell.objects.bulk_create(workList)
+                        workList = []
         elif 'csv' == type_excel:
             print("csv")
             if 'tbMROData' == name_excel:
@@ -212,7 +378,10 @@ def upload_tbCell(request):
                         workList = []
                         time1 = time.time()
                 Tbmrodata.objects.bulk_create(workList)
-                return HttpResponse("tbMROData Upload Success!")
+        else:
+            return render_to_response("uploadtbCell.html")
+        return render_to_response("uploadtbCell.html")
+    return render_to_response("uploadtbCell.html")
 
 
 ###############
