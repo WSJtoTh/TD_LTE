@@ -54,7 +54,7 @@ class SearchTbCellForm(forms.Form):
 
 class SearchKPIForm(forms.Form):
     startTime = forms.CharField(max_length=50)
-    enTime = forms.CharField(max_length=50)
+    endTime = forms.CharField(max_length=50)
     name = forms.CharField(max_length = 255)
     attr = forms.CharField(max_length = 255)
 
@@ -985,7 +985,7 @@ def download_data(request):
         return render(request, "dtest.html",)
 
 
-def analyse_3cell(request):
+def analyse_C2I(request):
 
     return render_to_response("analyC2I.html")
 
@@ -1036,14 +1036,60 @@ def search_sql_KPI(request):
             end = skf.cleaned_data["endTime"]
             name = skf.cleaned_data["name"]
             attr = skf.cleaned_data["attr"]
+            results = Tbkpi.objects.raw('select * from tbKPI where startTime'
+                                       ' between %s and %s '
+                                       'and name = %s', [start, end, name])
+            # result = Tbkpi.objects.filter(starttime__gt=start,
+            #                              starttime__lt=end, name=name).values("cell_multi").all()
+            print(results)
+            result = []
             if attr == '小区信息':
-                result = Tbkpi.objects.raw('select cell_multi from tbKPI where startTime'
-                                           ' between %s and %s '
-                                           'and name = %s', [start], [end], [name])
-                print(result)
-                return render_to_response("searchKPI.html",
-                                          {"result": result})
-            print("!!!!!!!!!!!")
+                for x in results:
+                    result.append(x.cell_multi)
+                    print(type(x))
+            elif attr == '小区名称':
+                for x in results:
+                    result.append(x.cell)
+                    print(type(x))
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+                    print(type(x))
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            return render_to_response("searchKPI.html",
+                                      {"result": result, "attr": attr})
         else:
             print("?????????????????????????????????????????????")
             return render_to_response("searchKPI.html", {"Name_List": nameList})
@@ -1162,6 +1208,7 @@ def search_sql_cell(request):
                     # dataFilter = Tbcell.objects.filter(sector_id=id)
                     # print(dataFilter)
                     result = tuple_to_cell_dict(data)
+                    print(data)
                     result = [result]
                     print(result)
                     result_len=len(result)
@@ -1196,22 +1243,22 @@ def tuple_to_cell_dict(data):
     result['city'] = data[0]
     result['sector_id'] = data[1]
     result['sector_name'] = data[2]
-    result['enodeb_name'] = data[4]
-    result['enodebid'] = data[3]
-    result['earfcn'] = data[5]
-    result['pci'] = data[6]
-    result['pss'] = data[7]
-    result['sss'] = data[8]
-    result['tac'] = data[9]
-    result['vendor'] = data[10]
-    result['longitude'] = data[11]
-    result['latitude'] = data[12]
-    result['style'] = data[13]
-    result['azimuth'] = data[14]
-    result['height'] = data[15]
-    result['electtilt'] = data[16]
-    result['mechtilt'] = data[17]
-    result['totletilt'] = data[18]
+    result['enodebid'] = data[13]
+    result['enodeb_name'] = data[14]
+    result['earfcn'] = data[3]
+    result['pci'] = data[4]
+    result['pss'] = data[5]
+    result['sss'] = data[6]
+    result['tac'] = data[7]
+    result['vendor'] = data[15]
+    result['longitude'] = data[16]
+    result['latitude'] = data[17]
+    result['style'] = data[18]
+    result['azimuth'] = data[8]
+    result['height'] = data[9]
+    result['electtilt'] = data[10]
+    result['mechtilt'] = data[11]
+    result['totletilt'] = data[12]
 
     return result
 
