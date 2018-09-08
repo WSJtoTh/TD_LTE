@@ -5,6 +5,7 @@
 		TD-LTE
 	</title>
 	<link rel="stylesheet" type="text/css" href="/static/css/first.css">
+	<script src="/static/js/jquery.min.js" type="text/javascript"></script>
 </head>
 <body>
 	<div id="title">
@@ -43,6 +44,7 @@
 
 		
 		<a href="#" id="close" onclick="closeLogDialog()">X</a>
+		<div id="Logtip"></div>
 	</div>
     </form>
     <form method="post" action="/login/" class="form1">
@@ -55,28 +57,34 @@
 			<input id="ord" type="radio"  name="type" value="Ord" />Ordinary
 		</div>
 		<input type="submit" name="RegSub" value="注册" onclick="submitRegist()">
-
-		
 		
 		<a href="#" id="closeReg" onclick="closeRegDialog()">X</a>
 	</div>
     </form>
-<script>
+<script type="text/javascript">
 
-    {% if  logResult  == "NO" %}
-        alert("用户名或密码错误！");
+  {% if  logResult  == "NO" %}
+		  //$('#Logtip').html("用户名或密码错误");
+		  alert("用户名或密码错误");
     {% endif %}
+  /*
+   var List={{ logResult|safe }};
+  for (i in List){
+       console.log(List[i]);
+    }
+    */
+
     {% if regResult == "用户名已存在" %}
     	alert("用户名已存在");
     {% elif regResult == "注册成功" %}
         alert("注册成功");
     {% endif %}
 
+
+
 </script>
 </body>
-<script type="text/javascript" src="/static/js/first.js">
-	
-</script>
+<script type="text/javascript" src="/static/js/first.js"></script>
 
 
 </html>

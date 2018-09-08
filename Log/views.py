@@ -947,15 +947,17 @@ def download_table(request):
                 Opt_lenth = len(tb_Opt)
                 print(len(tb_Opt))
                 print(type(tb_Opt))
-                return render_to_response("download.html", {"Opt_table": tb_Opt, 'tb_Name': 'tbOptCell'})
+                return render_to_response("download.html", {"Opt_table": tb_Opt, 'tb_Name': 'tbOptCell','tb_length':Opt_lenth})
             elif down_file == 'tbATUHandOver':
                 tb_ATU = Tbatuhandover.objects.all()
                 print(tb_ATU)
-                return render_to_response("download.html", {"ATU_table": tb_ATU, 'tb_Name': 'tbATUHandover'})
+                ATU_lenth = len(tb_ATU)
+                return render_to_response("download.html", {"ATU_table": tb_ATU, 'tb_Name': 'tbATUHandover','tb_length':ATU_lenth})
             elif down_file == 'tbAdjCell':
                 tb_Adj = Tbadjcell.objects.all()
                 print(tb_Adj)
-                return render_to_response("download.html", {"Adj_table": tb_Adj, 'tb_Name': 'tbAdjCell'})
+                Adj_lenth=len(tb_Adj)
+                return render_to_response("download.html", {"Adj_table": tb_Adj, 'tb_Name': 'tbAdjCell','tb_length':Adj_lenth})
 
     return render_to_response("download.html")
 
