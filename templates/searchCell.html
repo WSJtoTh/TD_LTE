@@ -102,9 +102,15 @@
                                     <label>请选择CellID：</label>
                                     <input type="text" id="txt_id" list="ide" name="index" />
                                     <datalist id="ide">
-                                        <option value="274175-144" />
+                                        <!--<option value="274175-144" />
                                         <option value="23456" />
-                                        <option value="45678" />
+                                        <option value="45678" />-->
+										        {% for id in CellID_List  %}
+           												<option value="{{ id.sector_id }}"/>
+        										{% empty %}
+														<option value="无数据"/>
+												{% endfor %}
+
                                     </datalist>
                                     <br>
                                     <input type="submit" name="searchID" id="searchID" value="查询" onclick="getTablebyID()">
@@ -122,9 +128,15 @@
 										<label>请选择CellName：</label> 
 										<input type="text" id="txt_name" list="name" name="index"/>
 										<datalist id="name"> 
-											<option value="三门峡渑池苏门-HLHF-2" />
+											<!--<option value="三门峡渑池苏门-HLHF-2" />
 											<option value="南滨路" /> 
-											<option value="深度发觉" /> 
+											<option value="深度发觉" /> -->
+											{% for name in CellName_List  %}
+           										 <option value="{{name.sector_name}}"/>
+        									{% empty %}
+												 <option value="无数据"></option>
+        									{% endfor %}
+
 										</datalist>
 										<br>
 										<input type="submit" name="searchName" id="searchName" value="查询" onclick="getTablebyName()">
@@ -137,17 +149,13 @@
 					</div>
 				</div>
 			</div>
-        {% for id in CellID_List  %}
+    <!--    {% for id in CellID_List  %}
             {{ id }}<br/>
         {% empty %}
             <p>表格中没有数据</p>
-        {% endfor %}
+        {% endfor %} -->
 
-        {% for name in CellName_List  %}
-            {{ name }}<br/>
-        {% empty %}
-            <p>表格中没有数据</p>
-        {% endfor %}
+
 
 			<div class="preview">
 
@@ -159,22 +167,22 @@
 					</div>
 					<a href="#" onclick="insertRow()"> insert</a>
 					<div id="myDiv">
+						<p>共有{{length}}条数据</p>
 						<table id="tableExcel"  border="1" >
 							<!-- caption元素可以生成表标题，其单元格列跨度为表格的列数 -->
 
 							<caption id="tableTitle">tbCell</caption>
-                    {% for a in result %}
-                        {{ a.sector_id }}
-                    {% endfor %}
+
 							<tr>
-								　　　　　　<th  id="CITY">CITY</th>
-								　　　　　　<th  id="SECTOR_ID">SECTOR_ID</th>
-								　　　　　　<th  id="SECTOR_NAME">SECTOR_NAME</th>
-								　　　　　　<th  id="ENODEBID">ENODEBID</th>
-								　　　　　　<th  id="ENODEB_NAME">ENODEB_NAME</th>
-								　　　　　　<th  id="EARFCN">EARFCN</th>
+								<th  id="CITY">CITY</th>
+								<th  id="SECTOR_ID">SECTOR_ID</th>
+								<th  id="SECTOR_NAME">SECTOR_NAME</th>
+								<th  id="ENODEBID">ENODEBID</th>
+								<th  id="ENODEB_NAME">ENODEB_NAME</th>
+								<th  id="EARFCN">EARFCN</th>
 								<th  id="PCI">PCI</th>
 								<th  id="PSS">PSS</th>
+								<th  id="SSS">SSS</th>
 								<th  id="TAC">TAC</th>
 								<th  id="VENDOR">VENDOR</th>
 								<th  id="LONGITUDE">LONGITUDE</th>
@@ -189,13 +197,32 @@
 
 							</tr>
 
-							<tr>
-								<td>123</td>
-								<td>345</td>
-								<td>567</td>
+							{% for a in result %}
+								<tr>
+									<td>{{ a.city }}</td>
+									<td>{{ a.sector_id }}</td>
+									<td>{{ a.sector_name }}</td>
+									<td>{{ a.enodebid }}</td>
+									<td>{{ a.enodeb_name }}</td>
+									<td>{{ a.earfcn }}</td>
+									<td>{{ a.pci }}</td>
+									<td>{{ a.pss }}</td>
+									<td>{{ a.sss }}</td>
+									<td>{{ a.tac }}</td>
+									<td>{{ a.vendor }}</td>
+									<td>{{ a.longitude }}</td>
+									<td>{{ a.latitude }}</td>
+									<td>{{ a.style }}</td>
+									<td>{{ a.azimuth }}</td>
+									<td>{{ a.height }}</td>
+									<td>{{ a.electtilt }}</td>
+									<td>{{ a.mechtilt }}</td>
+									<td>{{ a.totletilt }}</td>
 
-							</tr>
-
+								</tr>
+							{% empty%}
+								<p>无数据</p>
+							{% endfor %}
 						</table>
 					</div>
 				</div>

@@ -1130,7 +1130,8 @@ def search_sql_cell(request):
                 #print(dataFilter)
                 result = tuple_to_cell_dict(data)
                 result = [result]
-                return render_to_response("searchCell.html", {"result": result, 'length': 19})
+                result_len=len(result)
+                return render_to_response("searchCell.html", {"result": result, "length": result_len})
             else:
                 index = {'sector_name': search}
                 if index in nameList:
@@ -1147,7 +1148,8 @@ def search_sql_cell(request):
                     result = tuple_to_cell_dict(data)
                     result = [result]
                     print(result)
-                    return render_to_response("searchCell.html", {"result": result})
+                    result_len=len(result)
+                    return render_to_response("searchCell.html", {"result": result,"length":result_len_len})
                 else:
                     print("?????????????????????????????????????????????")
                     return render_to_response("searchCell.html", {"CellID_List": idList, "CellName_List": nameList})

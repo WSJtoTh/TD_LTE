@@ -5,7 +5,9 @@ html *{
 	}
 	body{
 		/*background-image: url(img/bg.jpg);*/
-		background-color: white; 
+		background-color: white;
+		margin:0;
+
 	}
 	/*
 	.imgon {

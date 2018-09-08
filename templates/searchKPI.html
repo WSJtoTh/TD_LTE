@@ -75,7 +75,7 @@
 
 
 	<!--DEMO end-->
-	<form class="info">
+	<div class="info">
 		<div class="title">
 			<h2>KPI指标信息查询</h2>
 		</div>
@@ -155,8 +155,10 @@
 
 					<!--</div>-->
 				</div>
-				<input type="submit" name="submit" id="submitInfo" >
+
+				<input type="submit" name="submit" id="submitInfo" value="查询" />
             </form>
+		</div>
 {% for name in NameList %}
     {{ name }}
 {% endfor %}
