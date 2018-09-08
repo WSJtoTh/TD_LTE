@@ -1580,7 +1580,9 @@ def search_sql_KPI(request):
                     result.append(x.ap_field)
             result_count=len(result)
             return render_to_response("searchKPI.html",
-                                      {"result": json.dumps(result), "attr": json.dumps(attr),"length":json.dumps(result_count),"Name_List": nameList})
+                                      {"result": json.dumps(result), "attr": json.dumps(attr),
+                                       "length":json.dumps(result_count), "Name_List": nameList,
+                                       "dateList": json.dumps(dateList)})
         else:
             return render_to_response("searchKPI.html", {"Name_List": nameList})
     return render_to_response("searchKPI.html", {"Name_List": nameList})
