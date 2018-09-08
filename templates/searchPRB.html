@@ -155,12 +155,15 @@
 		<div class="title">
 			<h2>PRB指标信息查询</h2>
 		</div>
+        <form action="searchPRBIndex" method="post">
+
+
 		<div class="choose">
 			<div id="chooseName">
 				<label>请选择网元名称：</label> 
-				<input type="text" id="txt_name" list="name" /> 
+				<input type="text" id="txt_name" list="name" name="name"/>
 				<datalist id="name"> 
-					<option value="时代峰峻" /> 
+					<option value="三门峡连霍义马高速东-HLHF" />
 					<option value="南滨路" /> 
 					<option value="深度发觉" /> 
 				</datalist>
@@ -169,7 +172,7 @@
 			
 			<div id="chooseAttr">
 				<label>请选择属性：</label> 
-				<input type="text" id="txt_attr" list="attr" /> 
+				<input type="text" id="txt_attr" list="attr" name="attr" />
 				<datalist id="attr"> 			
 
 				</datalist>
@@ -200,10 +203,10 @@
 
 									<p>
 										<label>StartTime</label>
-										<input class=flatpickr data-enable-time=true data-time_24hr=true placeholder="24 hour time" id="startTime"> 
+										<input class=flatpickr data-enable-time=true data-time_24hr=true placeholder="24 hour time" id="startTime" name="startTime">
 									</p>
 									<label>EndTime</label>
-									<input class=flatpickr data-enable-time=true data-time_24hr=true placeholder="24 hour time" id="endTime">
+									<input class=flatpickr data-enable-time=true data-time_24hr=true placeholder="24 hour time" id="endTime" name="endTime">
 									<br>
 
 								</div>
@@ -217,7 +220,10 @@
 
 				<input type="submit" name="submit" id="submitInfo" onclick="getInfo()">
 			</div>
-
+            </form>
+        {% for prb in result %}
+            {{ prb }}<br/>
+        {% endfor %}
 			<div class="pic">
 				<div id="main" style="height:10px;width: 10px"></div>
 				<!--ECharts单文件引入 -->

@@ -9,6 +9,7 @@ from Log.models import Tbmrodata
 from Log.models import Userlist2
 from Log.models import Tbatuhandover
 from Log.models import Tbadjcell
+from Log.models import Tbprbnew
 import time
 import datetime
 import xlrd
@@ -58,6 +59,12 @@ class SearchKPIForm(forms.Form):
     name = forms.CharField(max_length = 255)
     attr = forms.CharField(max_length = 255)
 
+
+class SearchPRBForm(forms.Form):
+    startTime = forms.CharField(max_length=50)
+    endTime = forms.CharField(max_length=50)
+    name = forms.CharField(max_length = 255)
+    attr = forms.CharField(max_length = 255)
 
 print("开始了")
 
@@ -996,6 +1003,334 @@ def analyse_3cell(request):
 
 def search_sql_PRB(request):
     nameList = Tbprb.objects.values("name").all().distinct()
+    if request.method == "POST":
+        print("POST")
+        spf = SearchPRBForm(request.POST)
+        print(spf)
+        if spf.is_valid():
+            start = spf.cleaned_data["startTime"]
+            print(start)
+            end = spf.cleaned_data["endTime"]
+            name = spf.cleaned_data["name"]
+            attr = spf.cleaned_data["attr"]
+            print(attr)
+
+            results = Tbprbnew.objects.raw('select * from tbPRBNew where startTime '
+                                           'between %s and %s and name = %s', [start, end, name])
+
+            #results = Tbprbnew.objects.raw('select * from tbPRBNew where name = %s', [name])
+            for x in results:
+                print("结果")
+                print(x.prb0)
+            print(results)
+            result = []
+            for j in range(0, 99):
+                i = str(j)
+                if i in attr:
+                    print("OK")
+                    if 0 == j:
+                        for x in results:
+                            result.append(x.prb0)
+                    elif 1 == j:
+                        for x in results:
+                            result.append(x.prb1)
+                    elif 2 == j:
+                        for x in results:
+                            result.append(x.prb2)
+                    elif 3 == j:
+                        for x in results:
+                            result.append(x.prb3)
+                    elif 4 == j:
+                        for x in results:
+                            result.append(x.prb4)
+                    elif 5 == j:
+                        for x in results:
+                            result.append(x.prb5)
+                    elif 6 == j:
+                        for x in results:
+                            result.append(x.prb6)
+                    elif 7 == j:
+                        for x in results:
+                            result.append(x.prb7)
+                    elif 8 == j:
+                        for x in results:
+                            result.append(x.prb8)
+                    elif 9 == j:
+                        for x in results:
+                            result.append(x.prb9)
+                    elif 10 == j:
+                        for x in results:
+                            result.append(x.prb10)
+                    elif 11 == j:
+                        for x in results:
+                            result.append(x.prb11)
+                    elif 12 == j:
+                        for x in results:
+                            result.append(x.prb12)
+                    elif 13 == j:
+                        for x in results:
+                            result.append(x.prb13)
+                    elif 14 == j:
+                        for x in results:
+                            result.append(x.prb14)
+                    elif 15 == j:
+                        for x in results:
+                            result.append(x.prb15)
+                    elif 16 == j:
+                        for x in results:
+                            result.append(x.prb16)
+                    elif 17 == j:
+                        for x in results:
+                            result.append(x.prb17)
+                    elif 18 == j:
+                        for x in results:
+                            result.append(x.prb18)
+                    elif 19 == j:
+                        for x in results:
+                            result.append(x.prb19)
+                    elif 20 == j:
+                        for x in results:
+                            result.append(x.prb20)
+                    elif 21 == j:
+                        for x in results:
+                            result.append(x.prb21)
+                    elif 22 == j:
+                        for x in results:
+                            result.append(x.prb22)
+                    elif 23 == j:
+                        for x in results:
+                            result.append(x.prb23)
+                    elif 24 == j:
+                        for x in results:
+                            result.append(x.prb24)
+                    elif 25 == j:
+                        for x in results:
+                            result.append(x.prb25)
+                    elif 26 == j:
+                        for x in results:
+                            result.append(x.prb26)
+                    elif 27 == j:
+                        for x in results:
+                            result.append(x.prb27)
+                    elif 28 == j:
+                        for x in results:
+                            result.append(x.prb28)
+                    elif 29 == j:
+                        for x in results:
+                            result.append(x.prb29)
+                    elif 30 == j:
+                        for x in results:
+                            result.append(x.prb30)
+                    elif 31 == j:
+                        for x in results:
+                            result.append(x.prb31)
+                    elif 32 == j:
+                        for x in results:
+                            result.append(x.prb32)
+                    elif 33 == j:
+                        for x in results:
+                            result.append(x.prb33)
+                    elif 34 == j:
+                        for x in results:
+                            result.append(x.prb34)
+                    elif 35 == j:
+                        for x in results:
+                            result.append(x.prb35)
+                    elif 36 == j:
+                        for x in results:
+                            result.append(x.prb36)
+                    elif 37 == j:
+                        for x in results:
+                            result.append(x.prb37)
+                    elif 38 == j:
+                        for x in results:
+                            result.append(x.prb38)
+                    elif 39 == j:
+                        for x in results:
+                            result.append(x.prb39)
+                    elif 40 == j:
+                        for x in results:
+                            result.append(x.prb40)
+                    elif 41 == j:
+                        for x in results:
+                            result.append(x.prb41)
+                    elif 42 == j:
+                        for x in results:
+                            result.append(x.prb42)
+                    elif 43 == j:
+                        for x in results:
+                            result.append(x.prb43)
+                    elif 44 == j:
+                        for x in results:
+                            result.append(x.prb44)
+                    elif 45 == j:
+                        for x in results:
+                            result.append(x.prb45)
+                    elif 46 == j:
+                        for x in results:
+                            result.append(x.prb46)
+                    elif 47 == j:
+                        for x in results:
+                            result.append(x.prb47)
+                    elif 48 == j:
+                        for x in results:
+                            result.append(x.prb48)
+                    elif 49 == j:
+                        for x in results:
+                            result.append(x.prb49)
+                    elif 50 == j:
+                        for x in results:
+                            result.append(x.prb50)
+                    elif 51 == j:
+                        for x in results:
+                            result.append(x.prb51)
+                    elif 52 == j:
+                        for x in results:
+                            result.append(x.prb52)
+                    elif 53 == j:
+                        for x in results:
+                            result.append(x.prb53)
+                    elif 54 == j:
+                        for x in results:
+                            result.append(x.prb54)
+                    elif 55 == j:
+                        for x in results:
+                            result.append(x.prb55)
+                    elif 56 == j:
+                        for x in results:
+                            result.append(x.prb56)
+                    elif 57 == j:
+                        for x in results:
+                            result.append(x.prb57)
+                    elif 58 == j:
+                        for x in results:
+                            result.append(x.prb58)
+                    elif 59 == j:
+                        for x in results:
+                            result.append(x.prb59)
+                    elif 60 == j:
+                        for x in results:
+                            result.append(x.prb60)
+                    elif 61 == j:
+                        for x in results:
+                            result.append(x.prb61)
+                    elif 62 == j:
+                        for x in results:
+                            result.append(x.prb62)
+                    elif 63 == j:
+                        for x in results:
+                            result.append(x.prb63)
+                    elif 64 == j:
+                        for x in results:
+                            result.append(x.prb64)
+                    elif 65 == j:
+                        for x in results:
+                            result.append(x.prb65)
+                    elif 66 == j:
+                        for x in results:
+                            result.append(x.prb66)
+                    elif 67 == j:
+                        for x in results:
+                            result.append(x.prb67)
+                    elif 68 == j:
+                        for x in results:
+                            result.append(x.prb68)
+                    elif 69 == j:
+                        for x in results:
+                            result.append(x.prb69)
+                    elif 70 == j:
+                        for x in results:
+                            result.append(x.prb70)
+                    elif 71 == j:
+                        for x in results:
+                            result.append(x.prb71)
+                    elif 72 == j:
+                        for x in results:
+                            result.append(x.prb72)
+                    elif 73 == j:
+                        for x in results:
+                            result.append(x.prb73)
+                    elif 74 == j:
+                        for x in results:
+                            result.append(x.prb74)
+                    elif 75 == j:
+                        for x in results:
+                            result.append(x.prb75)
+                    elif 76 == j:
+                        for x in results:
+                            result.append(x.prb76)
+                    elif 77 == j:
+                        for x in results:
+                            result.append(x.prb77)
+                    elif 78 == j:
+                        for x in results:
+                            result.append(x.prb78)
+                    elif 79 == j:
+                        for x in results:
+                            result.append(x.prb79)
+                    elif 80 == j:
+                        for x in results:
+                            result.append(x.prb80)
+                    elif 81 == j:
+                        for x in results:
+                            result.append(x.prb81)
+                    elif 82 == j:
+                        for x in results:
+                            result.append(x.prb82)
+                    elif 83 == j:
+                        for x in results:
+                            result.append(x.prb83)
+                    elif 84 == j:
+                        for x in results:
+                            result.append(x.prb84)
+                    elif 85 == j:
+                        for x in results:
+                            result.append(x.prb85)
+                    elif 86 == j:
+                        for x in results:
+                            result.append(x.prb86)
+                    elif 87 == j:
+                        for x in results:
+                            result.append(x.prb87)
+                    elif 88 == j:
+                        for x in results:
+                            result.append(x.prb88)
+                    elif 89 == j:
+                        for x in results:
+                            result.append(x.prb89)
+                    elif 90 == j:
+                        for x in results:
+                            result.append(x.prb90)
+                    elif 91 == j:
+                        for x in results:
+                            result.append(x.prb91)
+                    elif 92 == j:
+                        for x in results:
+                            result.append(x.prb92)
+                    elif 93 == j:
+                        for x in results:
+                            result.append(x.prb93)
+                    elif 94 == j:
+                        for x in results:
+                            result.append(x.prb94)
+                    elif 95 == j:
+                        for x in results:
+                            result.append(x.prb95)
+                    elif 96 == j:
+                        for x in results:
+                            result.append(x.prb96)
+                    elif 97 == j:
+                        for x in results:
+                            result.append(x.prb97)
+                    elif 98 == j:
+                        for x in results:
+                            result.append(x.prb98)
+                    elif 99 == j:
+                        for x in results:
+                            result.append(x.prb99)
+                    break
+
+            return render_to_response("searchPRB.html", {"result": result, "attr": attr})
 
     return render_to_response("searchPRB.html", {"Name_List": nameList})
 
@@ -1090,7 +1425,7 @@ def search_sql_eNodeb(request):
     """
     idList = list(Tbcell.objects.values("enodebid").all().distinct())
     # ursor.execute("select distinct SECTOR_ID from TbCell ",)
-    nameList = Tbcell.objects.values("enodeb_name").all().distinct()
+    nameList = list(Tbcell.objects.values("enodeb_name").all().distinct())
 
     print("namelist:")
     print(idList)
