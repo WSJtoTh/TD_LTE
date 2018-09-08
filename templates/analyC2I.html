@@ -107,7 +107,10 @@
 					</table>
 				</div>
 			</div>
-
+{% for data in tbC2Inew %}
+    {{ data.c2i_mean }}<br/>
+    {{ data.std }}<br/>
+{% endfor %}
 		</div>
 	</div>
 
