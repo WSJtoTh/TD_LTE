@@ -1413,54 +1413,128 @@ def search_sql_KPI(request):
 
             #print(type(result_list))
 
-            if attr == '小区信息':
+
+
+            if attr == 'RRC连接建立完成次数（无）':
                 for x in results:
-                    result.append(x.cell_multi)
+                    result.append(x.suc_time)
                     print(type(x))
-            elif attr == '小区名称':
+            elif attr == 'RRC连接建立完成次数（包括重发）':
                 for x in results:
-                    result.append(x.cell)
-                    print(type(x))
-            elif attr == '':
+                    result.append(x.req_time)
+            elif attr == 'RRC建立成功率qf(%)':
                 for x in results:
-                    result.append(x.cell)
-                    print(type(x))
-            elif attr == '':
+                    result.append(x.rrc_suc_rate)
+            elif attr == 'E-RAB建立成功总次数（无）':
                 for x in results:
-                    result.append(x.cell)
-            elif attr == '':
+                    result.append(x.suc_total)
+            elif attr == 'E-RAB建立尝试总次数（无）':
                 for x in results:
-                    result.append(x.cell)
-            elif attr == '':
+                    result.append(x.try_total)
+            elif attr == 'E-RAB建立成功率2(%)':
                 for x in results:
-                    result.append(x.cell)
-            elif attr == '':
+                    result.append(x.e_rab_suc_rate)
+            elif attr == 'eNodeB触发的E-RAB异常释放总次数（无）':
                 for x in results:
-                    result.append(x.cell)
-            elif attr == '':
+                    result.append(x.enodeb_exception)
+            elif attr == '小区切换出E-RAB异常释放总次数（无）':
                 for x in results:
-                    result.append(x.cell)
-            elif attr == '':
+                    result.append(x.cell_exception)
+            elif attr == 'E-RAB掉线率（新）（%）':
                 for x in results:
-                    result.append(x.cell)
-            elif attr == '':
+                    result.append(x.e_rab_offline)
+            elif attr == '无线接通率ay（%）':
                 for x in results:
-                    result.append(x.cell)
-            elif attr == '':
+                    result.append(x.ay)
+            elif attr == 'eNodeB发起的S1 RESET导致的UE Context释放次数 (无)':
                 for x in results:
-                    result.append(x.cell)
-            elif attr == '':
+                    result.append(x.enodeb_release_time)
+            elif attr == 'UE Context异常释放次数 (无)':
                 for x in results:
-                    result.append(x.cell)
-            elif attr == '':
+                    result.append(x.ue_context_exception_time)
+            elif attr == 'UE Context建立成功总次数 (无)':
                 for x in results:
-                    result.append(x.cell)
-            elif attr == '':
+                    result.append(x.ue_context_suc_time)
+            elif attr == '无线掉线率（%）':
                 for x in results:
-                    result.append(x.cell)
+                    result.append(x.wifi_offline_rate)
+            elif attr == 'eNodeB内异频切换出成功次数 (无)':
+                for x in results:
+                    result.append(x.t_field)
+            elif attr == 'eNodeB内异频切换出尝试次数 (无)':
+                for x in results:
+                    result.append(x.u_field)
+            elif attr == 'eNodeB内同频切换出成功次数 (无)':
+                for x in results:
+                    result.append(x.v_field)
+            elif attr == 'eNodeB内异频切换出尝试次数 (无)':
+                for x in results:
+                    result.append(x.w_field)
+            elif attr == 'eNodeB间异频切换出成功次数 (无)':
+                for x in results:
+                    result.append(x.x_field)
+            elif attr == 'eNodeB间异频切换出尝试次数 (无)':
+                for x in results:
+                    result.append(x.y_field)
+            elif attr == 'eNodeB间同频切换出成功次数 (无)':
+                for x in results:
+                    result.append(x.z_field)
+            elif attr == 'eNodeB间同频切换出尝试次数 (无)':
+                for x in results:
+                    result.append(x.aa_field)
+            elif attr == 'eNB内切换成功率（%）':
+                for x in results:
+                    result.append(x.ab_field)
+            elif attr == 'eNB间切换成功率（%）':
+                for x in results:
+                    result.append(x.ac_field)
+            elif attr == '同频切换成功率zsp（%）':
+                for x in results:
+                    result.append(x.ad_field)
+            elif attr == '异频切换成功率zsp（%）':
+                for x in results:
+                    result.append(x.ae_field)
+            elif attr == '切换成功率（%）':
+                for x in results:
+                    result.append(x.ae_field)
+            elif attr == '小区PDCP层所接收到的上行数据的总吞吐量 (比特)':
+                for x in results:
+                    result.append(x.af_field)
+            elif attr == '小区PDCP层所发送到的下行数据的总吞吐量':
+                for x in results:
+                    result.append(x.ag_field)
+            elif attr == 'RRC重建请求次数（无）':
+                for x in results:
+                    result.append(x.ah_field)
+            elif attr == 'RRC连接重建比率（%）':
+                for x in results:
+                    result.append(x.ai_field)
+            elif attr == '通过重建回源小区的eNodeB间同频切换出执行成功次数 (无)':
+                for x in results:
+                    result.append(x.aj_field)
+            elif attr == '通过重建回源小区的eNodeB间异频切换出执行成功次数 (无)':
+                for x in results:
+                    result.append(x.ak_field)
+            elif attr == '通过重建回源小区的eNodeB内同频切换出执行成功次数 (无)':
+                for x in results:
+                    result.append(x.al_field)
+            elif attr == '通过重建回源小区的eNodeB内同频切换出执行成功次数 (无)':
+                for x in results:
+                    result.append(x.am_field)
+            elif attr == '通过重建回源小区的eNodeB内异频切换出执行成功次数 (无)':
+                for x in results:
+                    result.append(x.an_field)
+            elif attr == 'eNB内切换出成功次数（次）':
+                for x in results:
+                    result.append(x.ao_field)
+            elif attr == 'eNB内切换出请求次数（次）':
+                for x in results:
+                    result.append(x.ap_field)
+            result_count=len(result)
+
 
             return render_to_response("searchKPI.html",
-                                      {"result": json.dumps(result_list), "attr": json.dumps(attr_str)})
+                                      {"result": json.dumps(result), "attr": json.dumps(attr),"length":json.dumps(result_count),"Name_List": nameList})
         else:
             print("?????????????????????????????????????????????")
             return render_to_response("searchKPI.html", {"Name_List": nameList})
