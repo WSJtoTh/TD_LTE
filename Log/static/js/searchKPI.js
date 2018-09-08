@@ -1,5 +1,7 @@
 function getInfo(){
-    var startTime;
+
+    var attr={{ attr|safe }}
+  /*  var startTime;
     startTime=document.getElementById('startTime').value;
     
     console.log(startTime);
@@ -15,7 +17,7 @@ function getInfo(){
     var attr;
     attr=document.getElementById('txt_attr').value;
     console.log(attr);
-
+*/
 if (startTime==""||endTime==""||name==""||attr=="") {
     	alert("不允许为空！请检查搜索信息！");
     }
