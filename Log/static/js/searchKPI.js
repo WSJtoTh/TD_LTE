@@ -1,3 +1,4 @@
+/*
 function getInfo(){
 
     var attr={{ attr|safe }}
@@ -18,6 +19,7 @@ function getInfo(){
     attr=document.getElementById('txt_attr').value;
     console.log(attr);
 */
+/*
 if (startTime==""||endTime==""||name==""||attr=="") {
     	alert("不允许为空！请检查搜索信息！");
     }
@@ -117,4 +119,4 @@ if (startTime==""||endTime==""||name==""||attr=="") {
         }
     );
 }
-    }
+    }*/
