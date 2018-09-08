@@ -200,7 +200,7 @@ class Tbadjcell(models.Model):
 
 class Tbc2I(models.Model):
     city = models.CharField(db_column='CITY', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    scell = models.ForeignKey('Tbcell', models.DO_NOTHING, db_column='SCELL', primary_key=True)  # Field name made lowercase.
+    scell = models.CharField(db_column='SCELL', primary_key=True, max_length=255)  # Field name made lowercase.
     ncell = models.CharField(db_column='NCELL', max_length=255)  # Field name made lowercase.
     prc2i9 = models.FloatField(db_column='PrC2I9', blank=True, null=True)  # Field name made lowercase.
     c2i_mean = models.FloatField(db_column='C2I_Mean', blank=True, null=True)  # Field name made lowercase.
@@ -331,15 +331,15 @@ class Tbmrodata(models.Model):
     timestamp = models.CharField(db_column='TimeStamp', primary_key=True, max_length=30)  # Field name made lowercase.
     servingsector = models.CharField(db_column='ServingSector', max_length=255)  # Field name made lowercase.
     interferingsector = models.CharField(db_column='InterferingSector', max_length=50)  # Field name made lowercase.
-    ltescrsrp = models.IntegerField(db_column='LteScRSRP', blank=True, null=True)  # Field name made lowercase.
-    ltencrsrp = models.IntegerField(db_column='LteNcRSRP', blank=True, null=True)  # Field name made lowercase.
+    ltescrsrp = models.IntegerField(db_column='LteScRSRP')  # Field name made lowercase.
+    ltencrsrp = models.IntegerField(db_column='LteNcRSRP')  # Field name made lowercase.
     ltencearfcn = models.IntegerField(db_column='LteNcEarfcn', blank=True, null=True)  # Field name made lowercase.
     ltencpci = models.SmallIntegerField(db_column='LteNcPci', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'tbMROData'
-        unique_together = (('timestamp', 'servingsector', 'interferingsector'),)
+        unique_together = (('timestamp', 'servingsector', 'interferingsector', 'ltescrsrp', 'ltencrsrp'),)
 
 
 class Tboptcell(models.Model):
@@ -605,6 +605,16 @@ class Tbsecadjcell(models.Model):
     class Meta:
         managed = False
         db_table = 'tbSecAdjCell'
+
+
+class Test(models.Model):
+    a_sector_id = models.CharField(db_column='A_sector_id', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    b_sector_id = models.CharField(db_column='B_sector_id', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    c_sector_id = models.CharField(db_column='C_sector_id', max_length=50, blank=True, null=True)  # Field name made lowercase.
+
+    class Meta:
+        managed = False
+        db_table = 'test'
 
 
 class Userlist2(models.Model):

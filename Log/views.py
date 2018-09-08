@@ -10,6 +10,7 @@ from Log.models import Userlist2
 from Log.models import Tbatuhandover
 from Log.models import Tbadjcell
 from Log.models import Tbprbnew
+from Log.models import Tbc2Inew
 import time
 import datetime
 import xlrd
@@ -86,6 +87,7 @@ def upload_tbCell(request):
         print(file_obj.name)
         bar_value = 0.0
         if 'xlsx' == type_excel:
+            print("正在读取文件")
             data = xlrd.open_workbook(filename=None, file_contents=file_obj.read())
             print("读取文件结束，准备导入！")
             table = data.sheet_by_index(0)
@@ -311,7 +313,7 @@ def upload_tbCell(request):
                             #print(row[0])
                             #date = datetime_transform(row[0])
                             date = datetime.strptime(row[0], "%m/%d/%Y %X")
-                            print(date)
+                            #print(date)
                             workList.append(Tbprb(starttime=date, turnround=row[1],  name=row[2], cell=row[3],
                                                   cell_name=row[4],
                                                   prb0=row[5], prb1=row[6], prb2=row[7], prb3=row[8],
@@ -349,10 +351,8 @@ def upload_tbCell(request):
                         print("出现空行！")
 
                     if successLines % 10000 == 0:  # 每五行进行一次插入
-                        bar_value = successLines / (successLines + failLines)
+                        bar_value = successLines / table.nrows
                         time2 = time.time()
-                        print("绑定列属性用时")
-                        print(time2 - time1)
                         print("已插入到")
                         print(successLines)
                         # print("已插入到第n行")
@@ -400,6 +400,7 @@ def upload_tbCell(request):
                 next(table)
                 failLines = 0
                 time1 = time.time()
+                print(len(table))
                 for row in table:
                     #print(line)
                     #print(type(line ))
@@ -411,7 +412,7 @@ def upload_tbCell(request):
                                     )
                     successLines = successLines + 1
                     if successLines % 50000 == 0:  # 每五行进行一次插入
-                        bar_value = successLines / (successLines + failLines)
+                        bar_value = successLines / len(table)
                         time2 = time.time()
                         print("绑定列属性用时")
                         print(time2 - time1)
@@ -993,9 +994,54 @@ def download_data(request):
 
 
 def analyse_C2I(request):
-
+    print("准备分析")
+    tbC2I = Tbc2Inew.objects.values("scell").all()
+    print(type(tbC2I))
+    if len(tbC2I) <= 0:
+        print("C2Inew为空")
+        compute_C2Inew()
+        print("计算完成")
+    if request.method == "POST":
+        results = Tbc2Inew.objects.all()
+        return render_to_response("analyC2I.html", {"tbC2Inew": results})
     return render_to_response("analyC2I.html")
 
+
+def compute_C2Inew():
+    cursor = connection.cursor()
+    cursor.execute('select *,'
+                   'avg((LteScRSRP-LteNcRSRP)*1.000) as C2I_mean,'
+                   'round(stdev(LteScRSRP-LteNcRSRP),6) as std '
+                   'from tbMROData '
+                   'group by ServingSector,InterferingSector'
+                   'having count(ServingSector)>100')
+    data = cursor.fetchall()
+    """
+     data = Tbmrodata.objects.raw('select *,'
+                                 'avg((LteScRSRP-LteNcRSRP)*1.000) as C2I_mean,'
+                                 'round(stdev(LteScRSRP-LteNcRSRP),6) as std '
+                                 'from tbMROData '
+                                 'group by ServingSector,InterferingSector'
+                                 'having count(ServingSector)>100')
+    """
+
+    workList = []
+    successLines = 0
+    for x in data:
+        print(x.C2I_mean)
+        prbc2i9 = norm(x.C2I_mean, x.std, 9)
+        prbc2i6 = norm(x.C2I_mean, x.std, 6)
+        workList.append(Tbc2Inew(scell=x.servingsector, ncell=interferingsector, c2i_mean=x.C2I_mean, std=x.std,
+                                 prbc2i9=prbc2i9, prbc2i6=prbc2i6))
+        successLines = successLines + 1
+        if successLines % 500 == 0:  # 每五行进行一次插入
+            print("已插入到")
+            print(successLines)
+            # print("已插入到第n行")
+            Tbc2inew.objects.bulk_create(workList)
+            workList = []
+    Tbc2inew.objects.bulk_create(workList)
+    return result
 
 def analyse_3cell(request):
     return render_to_response("analy3cell.html")
@@ -1601,12 +1647,14 @@ def search_cell(request):
                 id = index.get('sector_id')
                 dataFilter = Tbcell.objects.filter(sector_id=id)
                 print(dataFilter)
-                return render_to_response("searchCell.html", {"result": dataFilter})
+                return render_to_response("searchCell.html", {"result": dataFilter,
+                                                              "CellID_List": idList, "CellName_List": nameList})
             elif index in nameList:
                 print("按名字查询")
                 dataFilter = Tbcell.objects.filter(sector_name=index)
                 print(dataFilter)
-                return render_to_response("searchCell.html", {"result": dataFilter})
+                return render_to_response("searchCell.html", {"result": dataFilter,
+                                                              "CellID_List": idList, "CellName_List": nameList})
             else:
                 print("?????????????????????????????????????????????")
                 return render_to_response("searchCell.html", {"CellID_List": idList, "CellName_List": nameList})
@@ -1628,7 +1676,8 @@ def st_norm(u):
 def norm(a, sigma, x):
     '''一般正态分布'''
     u = (x - a) / sigma
-    return (st_norm(u))
+    return st_norm(u)
+
 
 def progress_bar(request):
     global bar_value
