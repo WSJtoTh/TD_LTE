@@ -86,9 +86,11 @@
 				<label>请选择网元名称：</label> 
 				<input type="text" id="txt_name" list="name" name="name"/>
 				<datalist id="name"> 
-					<option value="三门峡连霍义马高速东-HLHF" />
-					<option value="南滨路" /> 
-					<option value="深度发觉" /> 
+						{% for name in Name_List %}
+    						<option value="{{name.name}}"></option>
+						{% empty %}
+							<option value="无数据"></option>
+						{% endfor %}
 				</datalist>
 
 			</div>
@@ -158,12 +160,7 @@
 				<input type="submit" name="submit" id="submitInfo" >
             </form>
         </div>
-{% for name in NameList %}
-    {{ name }}
-{% endfor %}
-    {% for data in result %}
-        {{ data }}<br/>
-    {% endfor %}
+
 			<div class="pic">
 				<div id="main" style="height:10px;width: 10px"></div>
 				<!--ECharts单文件引入 -->
@@ -180,7 +177,13 @@
 
 		</div>
 
-
+	<script>
+			var attr={{attr|safe}};
+			var result_list={{result|safe}}	;
+			console.log(attr);
+			for(var i=0;i<10;i++)
+				console.log(result_list[i]);
+	</script>
 
 	</body>
 	</html>
