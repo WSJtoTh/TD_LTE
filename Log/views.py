@@ -995,37 +995,19 @@ def analyse_3cell(request):
 
 
 def search_sql_PRB(request):
-    return render_to_response("searchPRB.html")
+    nameList = Tbprb.objects.values("name").all().distinct()
+
+    return render_to_response("searchPRB.html", {"Name_List": nameList})
 
 
 def search_sql_KPI(request):
-    #cursor = connection.cursor()
-    """
-    # Data modifying operation - commit required
-    cursor.execute("UPDATE bar SET foo = 1 WHERE baz = %s", [self.baz])
-    transaction.commit_unless_managed()
-    # Data retrieval operation - no commit required
-    cursor.execute("SELECT foo FROM bar WHERE baz = %s", [self.baz])
-    row = cursor.fetchone()
-    """
-    #idList = list(Tbcell.objects.values("enodebid").all().distinct())
-    # ursor.execute("select distinct SECTOR_ID from TbCell ",)
     nameList = Tbkpi.objects.values("name").all().distinct()
     #nameList = {'1'}
     print("namelist:")
     #print(idList)
     print(type(nameList))
     print(nameList)
-    #for nameList in Tbkpi.objects.raw("select starttime, name from tbKPI"):
-     #   print(nameList.name)
     print("名字？？？")
-    #cell = Tbcell.objects.raw("select * from tbCell")
-   # print(cell)
-    #for x in cell:
-     #  print(x.sector_name)
-    #kpi = Tbkpi.objects.raw("select * from tbkpi")
-    #for y in kpi:
-     #   print(y.name)
     if request.method == "POST":
         print("POST")
         skf = SearchKPIForm(request.POST)
