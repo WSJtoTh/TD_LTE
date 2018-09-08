@@ -98,16 +98,18 @@
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-588620">
 							<div class="chooseTable">
+                                <form action="searchCellIndex" method="POST">
+                                    <label>请选择CellID：</label>
+                                    <input type="text" id="txt_id" list="ide" name="index" />
+                                    <datalist id="ide">
+                                        <option value="274175-144" />
+                                        <option value="23456" />
+                                        <option value="45678" />
+                                    </datalist>
+                                    <br>
+                                    <input type="submit" name="searchID" id="searchID" value="查询" onclick="getTablebyID()">
 
-								<label>请选择CellID：</label> 
-								<input type="text" id="txt_id" list="ide" /> 
-								<datalist id="ide"> 
-									<option value="12345" /> 
-									<option value="23456" /> 
-									<option value="45678" /> 
-								</datalist>
-								<br>
-								<input type="submit" name="searchID" id="searchID" value="查询" onclick="getTablebyID()">
+                                </form>
 								<!--
 									<button name="searchID" id="searchID" value="查询"></button>-->
 								</div>	
@@ -134,7 +136,17 @@
 					</div>
 				</div>
 			</div>
+        {% for id in CellID_List  %}
+            {{ id }}<br/>
+        {% empty %}
+            <p>表格中没有数据</p>
+        {% endfor %}
 
+        {% for name in CellName_List  %}
+            {{ name }}<br/>
+        {% empty %}
+            <p>表格中没有数据</p>
+        {% endfor %}
 
 			<div class="preview">
 
@@ -149,6 +161,9 @@
 						<table id="tableExcel"  border="1" >
 							<!-- caption元素可以生成表标题，其单元格列跨度为表格的列数 -->
 							<caption id="tableTitle">tbCell</caption>
+                    {% for x in result %}
+                        {{ x }}
+                    {% endfor %}
 							<tr>
 								　　　　　　<th  id="CITY">CITY</th>
 								　　　　　　<th  id="SECTOR_ID">SECTOR_ID</th>

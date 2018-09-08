@@ -21,6 +21,7 @@ from xlrd import xldate_as_tuple
 import csv
 from io import StringIO
 import json
+from django.db import connection, transaction
 # Create your views here.
 
 
@@ -45,6 +46,10 @@ class RegUserForm(forms.Form):
 
 class DownloadForm(forms.Form):
     down_file = forms.CharField(max_length=255)
+
+
+class SearchTbCellForm(forms.Form):
+    index = forms.CharField(max_length = 50)
 
 
 print("开始了")
@@ -237,7 +242,8 @@ def upload_tbCell(request):
                         print(failLines)
                         print(type(row[0]))
                         # print("已插入到第n行")
-                        Tbcell.objects.bulk_create(workList)
+                        bulk_re = Tbcell.objects.bulk_create(workList)
+                        print(bulk_re)
                         workList = []
             elif 'tbPRB' == name_excel:
                 for line in range(1, table.nrows):
@@ -938,16 +944,18 @@ def download_table(request):
             down_file = df.cleaned_data["down_file"]
             if down_file == 'tbOptCell':
                 tb_Opt = Tboptcell.objects.all()
-                print(tb_Opt)
-                return render_to_response("download.html", {"Opt_table": tb_Opt})
+                Opt_lenth = len(tb_Opt)
+                print(len(tb_Opt))
+                print(type(tb_Opt))
+                return render_to_response("download.html", {"Opt_table": tb_Opt, 'tb_Name': 'tbOptCell'})
             elif down_file == 'tbATUHandOver':
                 tb_ATU = Tbatuhandover.objects.all()
                 print(tb_ATU)
-                return render_to_response("download.html", {"ATU_table": tb_ATU})
+                return render_to_response("download.html", {"ATU_table": tb_ATU, 'tb_Name': 'tbATUHandover'})
             elif down_file == 'tbAdjCell':
                 tb_Adj = Tbadjcell.objects.all()
                 print(tb_Adj)
-                return render_to_response("download.html", {"Adj_table": tb_Adj})
+                return render_to_response("download.html", {"Adj_table": tb_Adj, 'tb_Name': 'tbAdjCell'})
 
     return render_to_response("download.html")
 
@@ -966,6 +974,101 @@ def download_data(request):
        #     return HttpResponse("表格没有数据")
     else:
         return render(request, "dtest.html",)
+
+
+def search_sql_cell(request):
+    cursor = connection.cursor()
+    """
+    # Data modifying operation - commit required
+    cursor.execute("UPDATE bar SET foo = 1 WHERE baz = %s", [self.baz])
+    transaction.commit_unless_managed()
+    # Data retrieval operation - no commit required
+    cursor.execute("SELECT foo FROM bar WHERE baz = %s", [self.baz])
+    row = cursor.fetchone()
+    """
+    idList = list(Tbcell.objects.values("sector_id").all().distinct())
+    cursor.execute("select distinct SECTOR_ID from TbCell ",)
+    nameList = cursor.fetchall()
+
+    print("namelist:")
+    print(idList)
+    print(type(nameList))
+    print(nameList)
+    print("名字？？？")
+    if request.method == "POST":
+        print("POST")
+        stf = SearchTbCellForm(request.POST)
+        if stf.is_valid():
+            index = stf.cleaned_data["index"]
+            print(type(index))
+            print(index)
+            print(type(idList[0]))
+            index = {'sector_id': index}
+            print(type(index))
+            print(index)
+            if index in idList:  # 按照ID查询
+                print("按ID查询")
+                id = str(index.get('sector_id'))
+                # Data modifying operation - commit required
+                print(type(id))
+                print(id)
+                id = [id]
+                print(type(id))
+                print(id)
+                cursor.execute("select * from TbCell where SECTOR_ID = %s", id)
+                data = cursor.fetchone()
+                print(type(data))
+                print(data)
+                #transaction.commit_unless_managed()
+
+                #dataFilter = Tbcell.objects.filter(sector_id=id)
+                #print(dataFilter)
+                return render_to_response("searchCell.html", {"result": data})
+            elif index in nameList:
+                print("按名字查询")
+                dataFilter = Tbcell.objects.filter(sector_name=index)
+                print(dataFilter)
+                return render_to_response("searchCell.html", {"result": dataFilter})
+            else:
+                print("?????????????????????????????????????????????")
+                return render_to_response("searchCell.html", {"CellID_List": idList, "CellName_List": nameList})
+    return render_to_response("searchCell.html", {"CellID_List": idList, "CellName_List": nameList})
+
+
+def tuple_to_cell_dict(data):
+    result = {'sector_id': '',}
+
+def search_cell(request):
+    idList = list(Tbcell.objects.values("sector_id").all().distinct())
+    nameList = Tbcell.objects.values("sector_name").all().distinct()
+
+    print(idList)
+    print(nameList)
+    if request.method == "POST":
+        stf = SearchTbCellForm(request.POST)
+        if stf.is_valid():
+            index = stf.cleaned_data["index"]
+            print(type(index))
+            print(index)
+            print(type(idList[0]))
+            index = {'sector_id': index}
+            print(type(index))
+            print(index)
+            if index in idList:     #按照ID查询
+                print("按ID查询")
+                id = index.get('sector_id')
+                dataFilter = Tbcell.objects.filter(sector_id=id)
+                print(dataFilter)
+                return render_to_response("searchCell.html", {"result": dataFilter})
+            elif index in nameList:
+                print("按名字查询")
+                dataFilter = Tbcell.objects.filter(sector_name=index)
+                print(dataFilter)
+                return render_to_response("searchCell.html", {"result": dataFilter})
+            else:
+                print("?????????????????????????????????????????????")
+                return render_to_response("searchCell.html", {"CellID_List": idList, "CellName_List": nameList})
+    return render_to_response("searchCell.html", {"CellID_List": idList, "CellName_List": nameList})
 
 
 def st_norm(u):

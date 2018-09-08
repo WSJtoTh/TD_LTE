@@ -90,6 +90,13 @@
             <p>表格中没有数据</p>
         {% endfor %}
 
+        {% for data in ATU_table  %}
+            {{ data.ssector_id}}<br/>
+        {% empty %}
+            <p>表格中没有数据</p>
+        {% endfor %}
+
+
 		<div class="preview">
 
 			<div class="box">
