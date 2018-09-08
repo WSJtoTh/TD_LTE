@@ -997,29 +997,30 @@ def analyse_C2I(request):
     tbC2I = Tbc2Inew.objects.values("scell").all()
     print(type(tbC2I))
     print(tbC2I)
-    #if len(tbC2I) <= 0:
-    print("C2Inew为空")
-    #compute_C2Inew()
-    print("计算完成")
-    cursor.execute('select * from tbC2INew')
-    data = cursor.fetchall()
-    print(data)
-    for x in data:
-        dict = tuple_to_c2i_dict(x)
-        prbc2i9 = norm(dict['c2i_mean'], dict['std'], 9)
-        prbc2i6 = norm(dict['c2i_mean'], dict['std'], 6)
-        print("prbc2i9")
-        print(prbc2i9)
-        print("prbc2i6")
-        print(prbc2i6)
-        cursor.execute('update tbC2INew set prbc2i9 = %s,prbabs6 = %s '
-                       'where SCELL= %s and NCELL= %s', (prbc2i9, prbc2i6, dict['scell'], dict['ncell']))
+    if len(tbC2I) <= 0:
+        print("C2Inew为空")
+        compute_C2Inew()
+        print("计算完成")
+        cursor.execute('select * from tbC2INew')
+        data = cursor.fetchall()
+        print(data)
+        for x in data:
+            dict = tuple_to_c2i_dict(x)
+            prbc2i9 = norm(dict['c2i_mean'], dict['std'], 9)
+            prbc2i6 = norm(dict['c2i_mean'], dict['std'], 6)
+            print("prbc2i9")
+            print(prbc2i9)
+            print("prbc2i6")
+            print(prbc2i6)
+            cursor.execute('update tbC2INew set prbc2i9 = %s,prbabs6 = %s '
+                           'where SCELL= %s and NCELL= %s', (prbc2i9, prbc2i6, dict['scell'], dict['ncell']))
+    else:
 
     #if request.method == "POST":
     #else:
-
+        result = Tbc2Inew.objects.all()
         #print(results)
-        #return render_to_response("analyC2I.html")
+        return render_to_response("analyC2I.html", {'tbC2Inew': result})
     return render_to_response("analyC2I.html")
 
 
@@ -1071,7 +1072,20 @@ def compute_C2Inew():
     Tbc2inew.objects.bulk_create(workList)
     """
 
+
+class AnalyseForm(forms.Form):
+    x = forms.FloatField()
+
+
 def analyse_3cell(request):
+    cursor = connection.cursor()
+    if request.method == "POST":
+        af = AnalyseForm(request.POST)
+        if af.is_valid():
+            x = af.cleaned_data["x"]
+            print(x)
+            cursor.execute('', (x))
+
     return render_to_response("analy3cell.html")
 
 
@@ -1410,7 +1424,7 @@ def search_sql_PRB(request):
 
 
 def search_sql_KPI(request):
-    nameList = Tbkpi.objects.values("name").all().distinct()
+    nameList = Tbkpi.objects.values("cell").all().distinct()
     #nameList = {'1'}
     print("namelist:")
     #print(idList)
@@ -1429,7 +1443,7 @@ def search_sql_KPI(request):
             attr = skf.cleaned_data["attr"]
             results = Tbkpi.objects.raw('select * from tbKPI where startTime'
                                        ' between %s and %s '
-                                       'and name = %s', [start, end, name])
+                                       'and cell = %s', [start, end, name])
             # result = Tbkpi.objects.filter(starttime__gt=start,
             #                              starttime__lt=end, name=name).values("cell_multi").all()
             print(results)
