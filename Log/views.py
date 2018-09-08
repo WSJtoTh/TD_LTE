@@ -1207,6 +1207,7 @@ def search_sql_cell(request):
                     # dataFilter = Tbcell.objects.filter(sector_id=id)
                     # print(dataFilter)
                     result = tuple_to_cell_dict(data)
+                    print(data)
                     result = [result]
                     print(result)
                     return render_to_response("searchCell.html", {"result": result})
@@ -1240,22 +1241,22 @@ def tuple_to_cell_dict(data):
     result['city'] = data[0]
     result['sector_id'] = data[1]
     result['sector_name'] = data[2]
-    result['enodeb_name'] = data[4]
-    result['enodebid'] = data[3]
-    result['earfcn'] = data[5]
-    result['pci'] = data[6]
-    result['pss'] = data[7]
-    result['sss'] = data[8]
-    result['tac'] = data[9]
-    result['vendor'] = data[10]
-    result['longitude'] = data[11]
-    result['latitude'] = data[12]
-    result['style'] = data[13]
-    result['azimuth'] = data[14]
-    result['height'] = data[15]
-    result['electtilt'] = data[16]
-    result['mechtilt'] = data[17]
-    result['totletilt'] = data[18]
+    result['enodebid'] = data[13]
+    result['enodeb_name'] = data[14]
+    result['earfcn'] = data[3]
+    result['pci'] = data[4]
+    result['pss'] = data[5]
+    result['sss'] = data[6]
+    result['tac'] = data[7]
+    result['vendor'] = data[15]
+    result['longitude'] = data[16]
+    result['latitude'] = data[17]
+    result['style'] = data[18]
+    result['azimuth'] = data[8]
+    result['height'] = data[9]
+    result['electtilt'] = data[10]
+    result['mechtilt'] = data[11]
+    result['totletilt'] = data[12]
 
     return result
 
