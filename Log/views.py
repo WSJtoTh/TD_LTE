@@ -206,7 +206,6 @@ def upload_tbCell(request):
                         Tbkpi.objects.bulk_create(workList)
                         workList = []
             elif 'tbCell' == name_excel:
-                time1 = time.time()
                 for line in range(1, table.nrows):
                     row = table.row_values(line)
                     if row:  # 检查是否为空行
@@ -251,7 +250,6 @@ def upload_tbCell(request):
                         bar_value = successLines / table.nrows
                         print("上传进度：")
                         print(bar_value)
-                        time2 = time.time()
                         print("success:")
                         print(successLines)
                         print("fail:")
@@ -443,7 +441,7 @@ def import_table_from_excel(request):
         if c.is_valid():
             table_choose = c.cleaned_data["table_choose"]
             if table_choose == '1':
-                data = xlrd.open_workbook(r'C:\Users\wansh\Desktop\tbCell.xlsx')
+                data = xlrd.open_workbook(r'D:\大四\上\数据库系统原理课程设计-18\三门峡地区TD-LTE网络数据-2017-03\tbCell.xlsx')
                 print("读取文件结束，准备导入！")
                 table = data.sheet_by_index(0)
                 successLines= 1
@@ -962,7 +960,7 @@ def download_table(request):
                 Opt_lenth = len(tb_Opt)
                 print(len(tb_Opt))
                 print(type(tb_Opt))
-                return render_to_response("download.html", {"Opt_table": tb_Opt, 'tb_Name': 'tbOptCell','tb_length':Opt_lenth})
+                return render_to_response("download.html", {"Opt_table": tb_Opt, 'tb_Name': 'tbOptCell', 'tb_length':Opt_lenth})
             elif down_file == 'tbATUHandOver':
                 tb_ATU = Tbatuhandover.objects.all()
                 print(tb_ATU)
@@ -994,28 +992,52 @@ def download_data(request):
 
 
 def analyse_C2I(request):
+    cursor = connection.cursor()
     print("准备分析")
     tbC2I = Tbc2Inew.objects.values("scell").all()
     print(type(tbC2I))
-    if len(tbC2I) <= 0:
-        print("C2Inew为空")
-        compute_C2Inew()
-        print("计算完成")
-    if request.method == "POST":
-        results = Tbc2Inew.objects.all()
-        return render_to_response("analyC2I.html", {"tbC2Inew": results})
+    print(tbC2I)
+    #if len(tbC2I) <= 0:
+    print("C2Inew为空")
+    #compute_C2Inew()
+    print("计算完成")
+    cursor.execute('select * from tbC2INew')
+    data = cursor.fetchall()
+    print(data)
+    for x in data:
+        dict = tuple_to_c2i_dict(x)
+        prbc2i9 = norm(dict['c2i_mean'], dict['std'], 9)
+        prbc2i6 = norm(dict['c2i_mean'], dict['std'], 6)
+        print("prbc2i9")
+        print(prbc2i9)
+        print("prbc2i6")
+        print(prbc2i6)
+        cursor.execute('update tbC2INew set prbc2i9 = %s,prbabs6 = %s '
+                       'where SCELL= %s and NCELL= %s', (prbc2i9, prbc2i6, dict['scell'], dict['ncell']))
+
+    #if request.method == "POST":
+    #else:
+
+        #print(results)
+        #return render_to_response("analyC2I.html")
     return render_to_response("analyC2I.html")
+
+
+def tuple_to_c2i_dict(data):
+    result = {}
+    result['scell'] = data[0]
+    result['ncell'] = data[1]
+    result['c2i_mean'] = data[2]
+    result['std'] = data[3]
+    return result
 
 
 def compute_C2Inew():
     cursor = connection.cursor()
-    cursor.execute('select *,'
-                   'avg((LteScRSRP-LteNcRSRP)*1.000) as C2I_mean,'
-                   'round(stdev(LteScRSRP-LteNcRSRP),6) as std '
-                   'from tbMROData '
-                   'group by ServingSector,InterferingSector'
-                   'having count(ServingSector)>100')
-    data = cursor.fetchall()
+    print("准备调用存储过程")
+    cursor.execute("exec create_C2INew")
+    #data = cursor.fetchall()
+    print("执行完存储过程了")
     """
      data = Tbmrodata.objects.raw('select *,'
                                  'avg((LteScRSRP-LteNcRSRP)*1.000) as C2I_mean,'
@@ -1023,8 +1045,14 @@ def compute_C2Inew():
                                  'from tbMROData '
                                  'group by ServingSector,InterferingSector'
                                  'having count(ServingSector)>100')
+    cursor.execute('select *,'
+                   'avg((LteScRSRP-LteNcRSRP)*1.000) as C2I_mean,'
+                   'round(stdev(LteScRSRP-LteNcRSRP),6) as std '
+                   'from tbMROData '
+                   'group by ServingSector,InterferingSector'
+                   'having count(ServingSector)>100')
     """
-
+    """
     workList = []
     successLines = 0
     for x in data:
@@ -1041,7 +1069,7 @@ def compute_C2Inew():
             Tbc2inew.objects.bulk_create(workList)
             workList = []
     Tbc2inew.objects.bulk_create(workList)
-    return result
+    """
 
 def analyse_3cell(request):
     return render_to_response("analy3cell.html")
