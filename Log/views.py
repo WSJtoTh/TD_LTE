@@ -985,6 +985,19 @@ def download_data(request):
         return render(request, "dtest.html",)
 
 
+def analyse_3cell(request):
+
+    return render_to_response("analyC2I.html")
+
+
+def analyse_3cell(request):
+    return render_to_response("analy3cell.html")
+
+
+def search_sql_PRB(request):
+    return render_to_response("searchPRB.html")
+
+
 def search_sql_KPI(request):
     #cursor = connection.cursor()
     """
@@ -1006,15 +1019,17 @@ def search_sql_KPI(request):
     #for nameList in Tbkpi.objects.raw("select starttime, name from tbKPI"):
      #   print(nameList.name)
     print("名字？？？")
-   # cell = Tbcell.objects.raw("select * from tbCell")
+    #cell = Tbcell.objects.raw("select * from tbCell")
+   # print(cell)
     #for x in cell:
-     #   print(x.sector_id)
+     #  print(x.sector_name)
     #kpi = Tbkpi.objects.raw("select * from tbkpi")
     #for y in kpi:
      #   print(y.name)
     if request.method == "POST":
         print("POST")
         skf = SearchKPIForm(request.POST)
+        print(skf)
         if skf.is_valid():
             start = skf.cleaned_data["startTime"]
             print(start)
@@ -1028,6 +1043,7 @@ def search_sql_KPI(request):
                 print(result)
                 return render_to_response("searchKPI.html",
                                           {"result": result})
+            print("!!!!!!!!!!!")
         else:
             print("?????????????????????????????????????????????")
             return render_to_response("searchKPI.html", {"Name_List": nameList})
