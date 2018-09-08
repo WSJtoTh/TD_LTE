@@ -975,6 +975,63 @@ def download_data(request):
     else:
         return render(request, "dtest.html",)
 
+def search_sql_eNodeb(request):
+    cursor = connection.cursor()
+    """
+    # Data modifying operation - commit required
+    cursor.execute("UPDATE bar SET foo = 1 WHERE baz = %s", [self.baz])
+    transaction.commit_unless_managed()
+    # Data retrieval operation - no commit required
+    cursor.execute("SELECT foo FROM bar WHERE baz = %s", [self.baz])
+    row = cursor.fetchone()
+    """
+    idList = list(Tbcell.objects.values("enodebid").all().distinct())
+    # ursor.execute("select distinct SECTOR_ID from TbCell ",)
+    nameList = Tbcell.objects.values("enodeb_name").all().distinct()
+
+    print("namelist:")
+    print(idList)
+    print(type(nameList))
+    print(nameList)
+    print("名字？？？")
+    if request.method == "POST":
+        print("POST")
+        stf = SearchTbCellForm(request.POST)
+        if stf.is_valid():
+            search = stf.cleaned_data["index"]
+            index = {'enodeb_name': search}
+            if index in nameList:
+                print("按名字查询")
+                name = str(index.get('enodeb_name'))
+
+                name = [name]
+                cursor.execute("select * from TbCell where enodeb_name = %s", name)
+                data = cursor.fetchone()
+                # transaction.commit_unless_managed()
+
+                # dataFilter = Tbcell.objects.filter(sector_id=id)
+                # print(dataFilter)
+                result = tuple_to_cell_dict(data)
+                result = [result]
+                print(result)
+                return render_to_response("searchEnodeb.html", {"result": result})
+            else:
+                search = eval(search)
+                index = {'enodebid': search}
+                print(index)
+                if index in idList:
+                    # 按照ID查询
+                    print("按ID查询")
+                    id = index.get('enodebid')
+                    dataFilter = Tbcell.objects.filter(enodebid=id)
+                    print(dataFilter)
+                    return render_to_response("searchEnodeb.html", {"result": dataFilter, 'length': 19})
+
+                else:
+                    print("?????????????????????????????????????????????")
+                    return render_to_response("searchEnodeb.html", {"EnodebID_List": idList, "EnodebName_List": nameList})
+    return render_to_response("searchEnodeb.html", {"EnodebID_List": idList, "EnodebName_List": nameList})
+
 
 def search_sql_cell(request):
     cursor = connection.cursor()
@@ -987,8 +1044,8 @@ def search_sql_cell(request):
     row = cursor.fetchone()
     """
     idList = list(Tbcell.objects.values("sector_id").all().distinct())
-    cursor.execute("select distinct SECTOR_ID from TbCell ",)
-    nameList = cursor.fetchall()
+    #ursor.execute("select distinct SECTOR_ID from TbCell ",)
+    nameList = Tbcell.objects.values("sector_name").all().distinct()
 
     print("namelist:")
     print(idList)
@@ -999,44 +1056,88 @@ def search_sql_cell(request):
         print("POST")
         stf = SearchTbCellForm(request.POST)
         if stf.is_valid():
-            index = stf.cleaned_data["index"]
-            print(type(index))
-            print(index)
-            print(type(idList[0]))
-            index = {'sector_id': index}
-            print(type(index))
-            print(index)
+            search = stf.cleaned_data["index"]
+            index = {'sector_id': search}
             if index in idList:  # 按照ID查询
                 print("按ID查询")
                 id = str(index.get('sector_id'))
                 # Data modifying operation - commit required
-                print(type(id))
-                print(id)
                 id = [id]
-                print(type(id))
-                print(id)
                 cursor.execute("select * from TbCell where SECTOR_ID = %s", id)
                 data = cursor.fetchone()
-                print(type(data))
-                print(data)
                 #transaction.commit_unless_managed()
 
                 #dataFilter = Tbcell.objects.filter(sector_id=id)
                 #print(dataFilter)
-                return render_to_response("searchCell.html", {"result": data})
-            elif index in nameList:
-                print("按名字查询")
-                dataFilter = Tbcell.objects.filter(sector_name=index)
-                print(dataFilter)
-                return render_to_response("searchCell.html", {"result": dataFilter})
+                result = tuple_to_cell_dict(data)
+                result = [result]
+                return render_to_response("searchCell.html", {"result": result, 'length': 19})
             else:
-                print("?????????????????????????????????????????????")
-                return render_to_response("searchCell.html", {"CellID_List": idList, "CellName_List": nameList})
+                index = {'sector_name': search}
+                if index in nameList:
+                    print("按名字查询")
+                    name = str(index.get('sector_name'))
+
+                    name = [name]
+                    cursor.execute("select * from TbCell where SECTOR_NAME = %s", name)
+                    data = cursor.fetchone()
+                    # transaction.commit_unless_managed()
+
+                    # dataFilter = Tbcell.objects.filter(sector_id=id)
+                    # print(dataFilter)
+                    result = tuple_to_cell_dict(data)
+                    result = [result]
+                    print(result)
+                    return render_to_response("searchCell.html", {"result": result})
+                else:
+                    print("?????????????????????????????????????????????")
+                    return render_to_response("searchCell.html", {"CellID_List": idList, "CellName_List": nameList})
     return render_to_response("searchCell.html", {"CellID_List": idList, "CellName_List": nameList})
 
 
 def tuple_to_cell_dict(data):
-    result = {'sector_id': '',}
+    result = {'sector_id': '',
+              'city': '',
+              'sector_name': '',
+                'enodebid': '',
+                'enodeb_name': '',
+                'earfcn': '',
+                'pci': '',
+                'pss': '',
+                'sss': '',
+                'tac': '',
+                'vendor': '',
+                'longitude': '',
+                'latitude': '',
+                'style': '',
+                'azimuth': '',
+                'height': '',
+                'electtilt': '',
+                'mechtilt': '',
+                'totletilt': ''}
+
+    result['city'] = data[0]
+    result['sector_id'] = data[1]
+    result['sector_name'] = data[2]
+    result['enodeb_name'] = data[4]
+    result['enodebid'] = data[3]
+    result['earfcn'] = data[5]
+    result['pci'] = data[6]
+    result['pss'] = data[7]
+    result['sss'] = data[8]
+    result['tac'] = data[9]
+    result['vendor'] = data[10]
+    result['longitude'] = data[11]
+    result['latitude'] = data[12]
+    result['style'] = data[13]
+    result['azimuth'] = data[14]
+    result['height'] = data[15]
+    result['electtilt'] = data[16]
+    result['mechtilt'] = data[17]
+    result['totletilt'] = data[18]
+
+    return result
+
 
 def search_cell(request):
     idList = list(Tbcell.objects.values("sector_id").all().distinct())

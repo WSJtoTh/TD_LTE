@@ -26,7 +26,8 @@ urlpatterns = [
     url(r'^user/', views.user, name="userIndex"),
     url(r'^bar/', views.progress_bar, name="barIndex"),
     url(r'^download/', views.download_table, name="downloadIndex"),
-    url(r'^searchCell/', views.search_sql_cell, name="searchCellIndex")
+    url(r'^searchCell/', views.search_sql_cell, name="searchCellIndex"),
+    url(r'^searchEnodeb/', views.search_sql_eNodeb, name="searchEnodebIndex")
     #######################
     #url(r'^test/', import_table_from_excel),
 ]

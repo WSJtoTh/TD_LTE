@@ -118,16 +118,17 @@
 							<div class="tab-pane" id="panel-854147">
 								<p>
 									<div class="chooseTable">
-
+                                <form action="searchCellIndex" method="POST">
 										<label>请选择CellName：</label> 
-										<input type="text" id="txt_name" list="name" /> 
+										<input type="text" id="txt_name" list="name" name="index"/>
 										<datalist id="name"> 
-											<option value="时代峰峻" /> 
+											<option value="三门峡渑池苏门-HLHF-2" />
 											<option value="南滨路" /> 
 											<option value="深度发觉" /> 
 										</datalist>
 										<br>
 										<input type="submit" name="searchName" id="searchName" value="查询" onclick="getTablebyName()">
+                                </form>
 									</div>	
 								</p>
 							</div>
@@ -160,9 +161,10 @@
 					<div id="myDiv">
 						<table id="tableExcel"  border="1" >
 							<!-- caption元素可以生成表标题，其单元格列跨度为表格的列数 -->
+
 							<caption id="tableTitle">tbCell</caption>
-                    {% for x in result %}
-                        {{ x }}
+                    {% for a in result %}
+                        {{ a.sector_id }}
                     {% endfor %}
 							<tr>
 								　　　　　　<th  id="CITY">CITY</th>

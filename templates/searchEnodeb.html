@@ -93,11 +93,11 @@
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-588620">
 							<div class="chooseTable">
-
+                            <form action="searchEnodebIndex" method="POST">
 								<label>请选择eNodeBID：</label> 
-								<input type="text" id="txt_id" list="ide" /> 
+								<input type="text" id="txt_id" list="ide" name="index"/>
 								<datalist id="ide"> 
-									<option value="12345" /> 
+									<option value="15320" />
 									<option value="23456" /> 
 									<option value="45678" /> 
 								</datalist>
@@ -105,23 +105,25 @@
 								<input type="submit" name="searchID" id="searchID" value="查询"
 								onclick="getTablebyID()" 
 								>
+                            </form>
 							</div>	
 
 						</div>
 						<div class="tab-pane" id="panel-854147">
 							<p>
 								<div class="chooseTable">
-
+                                <form action="searchEnodebIndex" method="POST">
 									<label>请选择eNodeBName：</label> 
-									<input type="text" id="txt_name" list="name" /> 
+									<input type="text" id="txt_name" list="name" name="index"/>
 									<datalist id="name"> 
-										<option value="时代峰峻" /> 
+										<option value="三门峡灵宝南阳村-HLHF" />
 										<option value="南滨路" /> 
 										<option value="深度发觉" /> 
 									</datalist>
 									<br>
 									<input type="submit" name="searchName" id="searchName" value="查询" onclick="getTablebyName()">
-								</div>	
+                                </form>
+                        </div>
 							</p>
 						</div>
 					</div>
@@ -129,7 +131,17 @@
 				</div>
 			</div>
 		</div>
+        {% for id in EnodebID_List  %}
+            {{ id }}<br/>
+        {% empty %}
+            <p>表格中没有数据</p>
+        {% endfor %}
 
+        {% for name in EnodebName_List  %}
+            {{ name }}<br/>
+        {% empty %}
+            <p>表格中没有数据</p>
+        {% endfor %}
 		<div class="preview">
 			
 			<div class="preview">
