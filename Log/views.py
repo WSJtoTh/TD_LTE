@@ -1015,10 +1015,13 @@ def analyse_C2I(request):
             cursor.execute('update tbC2INew set prbc2i9 = %s,prbabs6 = %s '
                            'where SCELL= %s and NCELL= %s', (prbc2i9, prbc2i6, dict['scell'], dict['ncell']))
     else:
-
-    #if request.method == "POST":
-    #else:
-        result = Tbc2Inew.objects.all()
+        cursor.execute('select * from tbC2INew')
+        data = cursor.fetchall()
+        print(data)
+        result = []
+        for x in data:
+            dict = tuple_to_c2i_dict(x)
+            result.append(dict)
         #print(results)
         return render_to_response("analyC2I.html", {'tbC2Inew': result})
     return render_to_response("analyC2I.html")
@@ -1030,6 +1033,8 @@ def tuple_to_c2i_dict(data):
     result['ncell'] = data[1]
     result['c2i_mean'] = data[2]
     result['std'] = data[3]
+    result['prbc2i9'] = data[4]
+    result['prbabs6'] = data[5]
     return result
 
 
@@ -1454,9 +1459,10 @@ def search_sql_KPI(request):
            # result_list=[]
 
             #print(type(result_list))
-
-
-
+            dateList = []
+            for x in results:
+                print(x.starttime)
+                dateList.append(x.starttime)
             if attr == 'RRC连接建立完成次数（无）':
                 for x in results:
                     result.append(x.suc_time)
@@ -1573,12 +1579,9 @@ def search_sql_KPI(request):
                 for x in results:
                     result.append(x.ap_field)
             result_count=len(result)
-
-
             return render_to_response("searchKPI.html",
                                       {"result": json.dumps(result), "attr": json.dumps(attr),"length":json.dumps(result_count),"Name_List": nameList})
         else:
-            print("?????????????????????????????????????????????")
             return render_to_response("searchKPI.html", {"Name_List": nameList})
     return render_to_response("searchKPI.html", {"Name_List": nameList})
 

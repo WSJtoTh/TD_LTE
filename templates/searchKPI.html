@@ -83,11 +83,11 @@
 		<div class="choose">
             <form action="searchKPIIndex" method="POST">
 			<div id="chooseName">
-				<label>请选择网元名称：</label> 
+				<label>请选择小区名称：</label>
 				<input type="text" id="txt_name" list="name" name="name" autocomplete="off"/>
 				<datalist id="name"> 
 						{% for name in Name_List %}
-    						<option value="{{name.name}}"></option>
+    						<option value="{{name.cell}}"></option>
 						{% empty %}
 							<option value="无数据"></option>
 						{% endfor %}
