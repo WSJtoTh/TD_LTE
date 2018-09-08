@@ -54,7 +54,7 @@ class SearchTbCellForm(forms.Form):
 
 class SearchKPIForm(forms.Form):
     startTime = forms.CharField(max_length=50)
-    enTime = forms.CharField(max_length=50)
+    endTime = forms.CharField(max_length=50)
     name = forms.CharField(max_length = 255)
     attr = forms.CharField(max_length = 255)
 
@@ -985,7 +985,7 @@ def download_data(request):
         return render(request, "dtest.html",)
 
 
-def analyse_3cell(request):
+def analyse_C2I(request):
 
     return render_to_response("analyC2I.html")
 
@@ -1036,14 +1036,60 @@ def search_sql_KPI(request):
             end = skf.cleaned_data["endTime"]
             name = skf.cleaned_data["name"]
             attr = skf.cleaned_data["attr"]
+            results = Tbkpi.objects.raw('select * from tbKPI where startTime'
+                                       ' between %s and %s '
+                                       'and name = %s', [start, end, name])
+            # result = Tbkpi.objects.filter(starttime__gt=start,
+            #                              starttime__lt=end, name=name).values("cell_multi").all()
+            print(results)
+            result = []
             if attr == '小区信息':
-                result = Tbkpi.objects.raw('select cell_multi from tbKPI where startTime'
-                                           ' between %s and %s '
-                                           'and name = %s', [start], [end], [name])
-                print(result)
-                return render_to_response("searchKPI.html",
-                                          {"result": result})
-            print("!!!!!!!!!!!")
+                for x in results:
+                    result.append(x.cell_multi)
+                    print(type(x))
+            elif attr == '小区名称':
+                for x in results:
+                    result.append(x.cell)
+                    print(type(x))
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+                    print(type(x))
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            elif attr == '':
+                for x in results:
+                    result.append(x.cell)
+            return render_to_response("searchKPI.html",
+                                      {"result": result, "attr": attr})
         else:
             print("?????????????????????????????????????????????")
             return render_to_response("searchKPI.html", {"Name_List": nameList})
