@@ -176,13 +176,14 @@ class Tbatudata(models.Model):
 
 
 class Tbatuhandover(models.Model):
-    ssector_id = models.CharField(db_column='SSECTOR_ID', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    nsector_id = models.CharField(db_column='NSECTOR_ID', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    ssector_id = models.CharField(db_column='SSECTOR_ID', primary_key=True, max_length=50)  # Field name made lowercase.
+    nsector_id = models.CharField(db_column='NSECTOR_ID', max_length=50)  # Field name made lowercase.
     hoatt = models.IntegerField(db_column='HOATT', blank=True, null=True)  # Field name made lowercase.
 
     class Meta:
         managed = False
         db_table = 'tbATUHandOver'
+        unique_together = (('ssector_id', 'nsector_id'),)
 
 
 class Tbadjcell(models.Model):
@@ -199,7 +200,7 @@ class Tbadjcell(models.Model):
 
 class Tbc2I(models.Model):
     city = models.CharField(db_column='CITY', max_length=255, blank=True, null=True)  # Field name made lowercase.
-    scell = models.ForeignKey('Tbcell', models.DO_NOTHING, db_column='SCELL')  # Field name made lowercase.
+    scell = models.ForeignKey('Tbcell', models.DO_NOTHING, db_column='SCELL', primary_key=True)  # Field name made lowercase.
     ncell = models.CharField(db_column='NCELL', max_length=255)  # Field name made lowercase.
     prc2i9 = models.FloatField(db_column='PrC2I9', blank=True, null=True)  # Field name made lowercase.
     c2i_mean = models.FloatField(db_column='C2I_Mean', blank=True, null=True)  # Field name made lowercase.
@@ -210,6 +211,7 @@ class Tbc2I(models.Model):
     class Meta:
         managed = False
         db_table = 'tbC2I'
+        unique_together = (('scell', 'ncell'),)
 
 
 class Tbc2I3(models.Model):
@@ -220,26 +222,6 @@ class Tbc2I3(models.Model):
     class Meta:
         managed = False
         db_table = 'tbC2I3'
-
-
-class Tbc2I4(models.Model):
-    a_sector_id = models.CharField(db_column='A_sector_id', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    b_sector_id = models.CharField(db_column='B_sector_id', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    c_sector_id = models.CharField(db_column='C_sector_id', max_length=50, blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'tbC2I4'
-
-
-class Tbc2I5(models.Model):
-    a_sector_id = models.CharField(db_column='A_sector_id', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    b_sector_id = models.CharField(db_column='B_sector_id', max_length=50, blank=True, null=True)  # Field name made lowercase.
-    c_sector_id = models.CharField(db_column='C_sector_id', max_length=50, blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'tbC2I5'
 
 
 class Tbc2Inew(models.Model):
@@ -346,7 +328,7 @@ class Tbkpi(models.Model):
 
 
 class Tbmrodata(models.Model):
-    timestamp = models.CharField(db_column='TimeStamp', max_length=30)  # Field name made lowercase.
+    timestamp = models.CharField(db_column='TimeStamp', primary_key=True, max_length=30)  # Field name made lowercase.
     servingsector = models.CharField(db_column='ServingSector', max_length=255)  # Field name made lowercase.
     interferingsector = models.CharField(db_column='InterferingSector', max_length=50)  # Field name made lowercase.
     ltescrsrp = models.IntegerField(db_column='LteScRSRP', blank=True, null=True)  # Field name made lowercase.
@@ -357,6 +339,7 @@ class Tbmrodata(models.Model):
     class Meta:
         managed = False
         db_table = 'tbMROData'
+        unique_together = (('timestamp', 'servingsector', 'interferingsector'),)
 
 
 class Tboptcell(models.Model):
@@ -390,10 +373,10 @@ class Tbpciassignment(models.Model):
 
 
 class Tbprb(models.Model):
-    starttime = models.DateTimeField(db_column='startTime', blank=True, null=True)  # Field name made lowercase.
+    starttime = models.DateTimeField(db_column='startTime', primary_key=True)  # Field name made lowercase.
     turnround = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=50, blank=True, null=True)
-    cell = models.CharField(max_length=255, blank=True, null=True)
+    cell = models.CharField(max_length=255)
     cell_name = models.CharField(max_length=50, blank=True, null=True)
     prb0 = models.FloatField(db_column='PRB0', blank=True, null=True)  # Field name made lowercase.
     prb1 = models.FloatField(db_column='PRB1', blank=True, null=True)  # Field name made lowercase.
@@ -499,13 +482,14 @@ class Tbprb(models.Model):
     class Meta:
         managed = False
         db_table = 'tbPRB'
+        unique_together = (('starttime', 'cell'),)
 
 
 class Tbprbnew(models.Model):
-    starttime = models.CharField(db_column='startTime', max_length=50, blank=True, null=True)  # Field name made lowercase.
+    starttime = models.CharField(db_column='startTime', primary_key=True, max_length=50)  # Field name made lowercase.
     turnround = models.IntegerField(blank=True, null=True)
     name = models.CharField(max_length=50, blank=True, null=True)
-    cell = models.CharField(max_length=255, blank=True, null=True)
+    cell = models.CharField(max_length=255)
     cell_name = models.CharField(max_length=50, blank=True, null=True)
     prb0 = models.FloatField(db_column='PRB0', blank=True, null=True)  # Field name made lowercase.
     prb1 = models.FloatField(db_column='PRB1', blank=True, null=True)  # Field name made lowercase.
@@ -611,6 +595,7 @@ class Tbprbnew(models.Model):
     class Meta:
         managed = False
         db_table = 'tbPRBNew'
+        unique_together = (('starttime', 'cell'),)
 
 
 class Tbsecadjcell(models.Model):
@@ -623,25 +608,11 @@ class Tbsecadjcell(models.Model):
 
 
 class Userlist2(models.Model):
-    username = models.CharField(primary_key=True, max_length=1)
-    password = models.CharField(max_length=1, blank=True, null=True)
+    username = models.CharField(primary_key=True, max_length=50)
+    password = models.CharField(max_length=50, blank=True, null=True)
     type = models.IntegerField(blank=True, null=True)
     state = models.IntegerField(blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'userlist2'
-
-
-class Xxx(models.Model):
-    timestamp = models.CharField(db_column='TimeStamp', max_length=30)  # Field name made lowercase.
-    servingsector = models.CharField(db_column='ServingSector', max_length=255)  # Field name made lowercase.
-    interferingsector = models.CharField(db_column='InterferingSector', max_length=50)  # Field name made lowercase.
-    ltescrsrp = models.IntegerField(db_column='LteScRSRP', blank=True, null=True)  # Field name made lowercase.
-    ltencrsrp = models.IntegerField(db_column='LteNcRSRP', blank=True, null=True)  # Field name made lowercase.
-    ltencearfcn = models.IntegerField(db_column='LteNcEarfcn', blank=True, null=True)  # Field name made lowercase.
-    ltencpci = models.SmallIntegerField(db_column='LteNcPci', blank=True, null=True)  # Field name made lowercase.
-
-    class Meta:
-        managed = False
-        db_table = 'xxx'
