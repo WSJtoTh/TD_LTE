@@ -52,6 +52,13 @@ class SearchTbCellForm(forms.Form):
     index = forms.CharField(max_length = 50)
 
 
+class SearchKPIForm(forms.Form):
+    startTime = forms.CharField(max_length=50)
+    enTime = forms.CharField(max_length=50)
+    name = forms.CharField(max_length = 255)
+    attr = forms.CharField(max_length = 255)
+
+
 print("开始了")
 
 global bar_value
@@ -976,6 +983,56 @@ def download_data(request):
        #     return HttpResponse("表格没有数据")
     else:
         return render(request, "dtest.html",)
+
+
+def search_sql_KPI(request):
+    #cursor = connection.cursor()
+    """
+    # Data modifying operation - commit required
+    cursor.execute("UPDATE bar SET foo = 1 WHERE baz = %s", [self.baz])
+    transaction.commit_unless_managed()
+    # Data retrieval operation - no commit required
+    cursor.execute("SELECT foo FROM bar WHERE baz = %s", [self.baz])
+    row = cursor.fetchone()
+    """
+    #idList = list(Tbcell.objects.values("enodebid").all().distinct())
+    # ursor.execute("select distinct SECTOR_ID from TbCell ",)
+    nameList = Tbkpi.objects.values("name").all().distinct()
+    #nameList = {'1'}
+    print("namelist:")
+    #print(idList)
+    print(type(nameList))
+    print(nameList)
+    #for nameList in Tbkpi.objects.raw("select starttime, name from tbKPI"):
+     #   print(nameList.name)
+    print("名字？？？")
+   # cell = Tbcell.objects.raw("select * from tbCell")
+    #for x in cell:
+     #   print(x.sector_id)
+    #kpi = Tbkpi.objects.raw("select * from tbkpi")
+    #for y in kpi:
+     #   print(y.name)
+    if request.method == "POST":
+        print("POST")
+        skf = SearchKPIForm(request.POST)
+        if skf.is_valid():
+            start = skf.cleaned_data["startTime"]
+            print(start)
+            end = skf.cleaned_data["endTime"]
+            name = skf.cleaned_data["name"]
+            attr = skf.cleaned_data["attr"]
+            if attr == '小区信息':
+                result = Tbkpi.objects.raw('select cell_multi from tbKPI where startTime'
+                                           ' between %s and %s '
+                                           'and name = %s', [start], [end], [name])
+                print(result)
+                return render_to_response("searchKPI.html",
+                                          {"result": result})
+        else:
+            print("?????????????????????????????????????????????")
+            return render_to_response("searchKPI.html", {"Name_List": nameList})
+    return render_to_response("searchKPI.html", {"Name_List": nameList})
+
 
 def search_sql_eNodeb(request):
     cursor = connection.cursor()
