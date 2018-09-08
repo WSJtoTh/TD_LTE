@@ -172,9 +172,17 @@ html *{
 	margin: 0 auto;
 }
 
+#myDiv{
+	width: 80%;
+	overflow: scroll;
+	height: 300px;
+	margin: 0 auto;
+}
+
 
 #tableExcel{
 	width: 350px;
+    height:300px;
 	overflow: scroll;
 	margin-top: 50px; 
 	border-collapse: collapse;

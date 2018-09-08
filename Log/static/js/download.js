@@ -1,5 +1,5 @@
  
-
+/*
 function getTable(){
     //清空表格
     var tb = document.getElementById('tableExcel');
@@ -50,8 +50,8 @@ function getTable(){
   }
 }
 
-
-
+*/
+/*
 function insertRow(){
     var index=document.getElementById("tableExcel").rows.length;
     var insertRow=document.getElementById("tableExcel").insertRow(index);
@@ -63,4 +63,4 @@ function insertRow(){
     y.innerHTML="2";
     z.innerHTML="3";
 
-}
+}*/
