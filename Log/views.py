@@ -831,7 +831,7 @@ def analyse_3cell(request):
                 print(result)
                 print("共有三元组")
                 print(count)
-                return render_to_response("analy3cell.html", {"triTuple:": json.dumps(result), "count": json.dumps(count)})
+                return render_to_response("analy3cell.html", {"triTuple": json.dumps(result), "count": json.dumps(count)})
             else:
                 return render_to_response("analy3cell.html")
     return render_to_response("analy3cell.html")
