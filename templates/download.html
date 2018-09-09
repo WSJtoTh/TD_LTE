@@ -144,7 +144,7 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
 				<li><a {% url 'searchCellIndex' %}>数据管理</a>
 					<ul class="sub-nav">
 						<li><a href={% url 'upTbCellIndex' %}>数据导入</a></li>
-						<li><a href={% url 'downloadIndex' %}>数据导出</a></li>
+						<li><a href={% url 'previewIndex' %}>数据导出</a></li>
 
 					</ul>
 				</li>
@@ -173,7 +173,7 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
 
 	<div id="info">
 		<div class="chooseTable">
-            <form action="/download/" method="post">
+            <form action="/preview/" method="post">
                 <label>请选择需要导出的表格：</label>
                 <input type="text" id="txt_ide" list="ide" name="down_file"/>
                 <datalist id="ide">
@@ -181,6 +181,7 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
                     <option value="tbOptCell" />
                     <option value="tbAdjCell" />
                 </datalist>
+
                 <button type="submit" id="okTable" onclick="getTable()">确认</button>
             </form>
 
@@ -198,7 +199,11 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
 
 			<div class="box">
 				<div>
-					<button type="button" id="excelBtn">导出Excel</button>
+                    <form action="/download/" method="post">
+                        <input readonly = True name="down_file" value={{ tb_Name }}>
+                        <button type="submit" id="excelBtn" onclick="getTablebyName()">导出Excel</button>
+                    </form>
+
 
 				</div>
 				<a href="#" onclick="insertRow()"> insert</a>

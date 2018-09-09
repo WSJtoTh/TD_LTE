@@ -42,10 +42,10 @@
 			<ul class="nav">
 
 
-				<li><a {% url 'searchCellIndex' %}>数据管理</a>
+				<li><a {% url 'upTbCellIndex' %}>数据管理</a>
 					<ul class="sub-nav">
 						<li><a href={% url 'upTbCellIndex' %}>数据导入</a></li>
-						<li><a href={% url 'downloadIndex' %}>数据导出</a></li>
+						<li><a href={% url 'previewIndex' %}>数据导出</a></li>
 
 					</ul>
 				</li>
@@ -93,7 +93,7 @@
 					<div class="tab-content">
 						<div class="tab-pane active" id="panel-588620">
 							<div class="chooseTable">
-                            <form action="searchEnodebIndex" method="POST">
+                            <form action="/searchEnodeb/" method="POST">
 								<label>请选择eNodeBID：</label> 
 								<input type="text" id="txt_id" list="ide" name="index" autocomplete="off"/>
 								<datalist id="ide"> 
@@ -114,7 +114,7 @@
 						<div class="tab-pane" id="panel-854147">
 							<p>
 								<div class="chooseTable">
-                                <form action="searchEnodebIndex" method="POST">
+                                <form action="/searchEnodeb/" method="POST">
 									<label>请选择eNodeBName：</label> 
 									<input type="text" id="txt_name" list="name" name="index" autocomplete="off"/>
 									<datalist id="name">

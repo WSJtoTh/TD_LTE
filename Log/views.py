@@ -948,6 +948,61 @@ def datetime_transform(raw_datetime):
 
 #数据导出
 
+def download_preview(request):
+    cursor = connection.cursor()
+    if request.method == "POST":
+        df = DownloadForm(request.POST)
+        if df.is_valid():
+            down_file = df.cleaned_data["down_file"]
+            print("预览")
+            if down_file == 'tbOptCell':
+                cursor.execute('select top 100* from tbOptCell')
+                tb_Opt = cursor.fetchall()
+                # print(tbC2I3)
+                result = []
+                row = {'sector_id': '', 'earfcn': '', 'cell_type': ''}
+                count = 0
+                for x in tb_Opt:
+                    row['sector_id'] = x[0]
+                    row['earfcn'] = x[1]
+                    row['cell_type'] = x[2]
+                    result.append(row)
+                    count = count + 1
+                return render_to_response("download.html",
+                                          {"Opt_table": result, 'tb_Name': 'tbOptCell', 'tb_length': count})
+            elif down_file == 'tbATUHandOver':
+                cursor.execute('select top 100* from tbATUHandover')
+                tb_ATU = cursor.fetchall()
+                # print(tbC2I3)
+                result = []
+                row = {'ssector_id': '', 'nsector_id': '', 'hoatt': ''}
+                count = 0
+                for x in tb_ATU:
+                    row['sector_id'] = x[0]
+                    row['nsector_id'] = x[1]
+                    row['hoatt'] = x[2]
+                    result.append(row)
+                    count = count + 1
+                return render_to_response("download.html",
+                                          {"ATU_table": result, 'tb_Name': 'tbATUHandover', 'tb_length': count})
+            elif down_file == 'tbAdjCell':
+                cursor.execute('select top 100* from tbAdjCell')
+                tb_Adj = cursor.fetchall()
+                # print(tbC2I3)
+                result = []
+                row = {'s_sector_id': '', 'n_sector_id': '', 's_earfcn': '', 'n_earfcn': ''}
+                count = 0
+                for x in tb_ATU:
+                    row['s_sector_id'] = x[0]
+                    row['n_sector_id'] = x[1]
+                    row['s_earfcn'] = x[2]
+                    row['n_earfcn'] = x[3]
+                    result.append(row)
+                    count = count + 1
+                return render_to_response("download.html",
+                                          {"Adj_table": result, 'tb_Name': 'tbAdjCell', 'tb_length': count})
+
+    return render_to_response("download.html")
 
 
 def download_table(request):
@@ -1089,8 +1144,24 @@ def analyse_3cell(request):
         if af.is_valid():
             x = af.cleaned_data["x"]
             print(x)
-            cursor.execute('', (x))
-
+            cursor.execute('exec proc_C2I3 %s', (x,))
+            print("完成三元组分析")
+            cursor.execute('select * from tbC2I3')
+            tbC2I3 = cursor.fetchall()
+            # print(tbC2I3)
+            result = []
+            row = {'a_id': '', 'b_id': '', 'c_id': ''}
+            count = 0
+            for x in tbC2I3:
+                row['a_id'] = x[0]
+                row['b_id'] = x[1]
+                row['c_id'] = x[2]
+                result.append(row)
+                count = count + 1
+                print(result)
+            print("共有三元组")
+            print(count)
+            return render_to_response("analy3cell.html", {"triTuple:": result, "count": count})
     return render_to_response("analy3cell.html")
 
 
@@ -1591,7 +1662,7 @@ def search_sql_KPI(request):
             return render_to_response("searchKPI.html",
                                       {"result": json.dumps(result), "attr": json.dumps(attr),
                                        "length":json.dumps(result_count), "Name_List": nameList,
-                                       "dateList": json.dumps(dateList),"name":json.dumps(name)})
+                                       "dateList": json.dumps(dateList)})
         else:
             return render_to_response("searchKPI.html", {"Name_List": nameList})
     return render_to_response("searchKPI.html", {"Name_List": nameList})
