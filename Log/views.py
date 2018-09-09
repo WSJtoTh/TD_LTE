@@ -564,7 +564,7 @@ def download_preview(request):
                 row = {'ssector_id': '', 'nsector_id': '', 'hoatt': ''}
                 count = 0
                 for x in tb_ATU:
-                    row['sector_id'] = x[0]
+                    row['ssector_id'] = x[0]
                     row['nsector_id'] = x[1]
                     row['hoatt'] = x[2]
                     result.append(row)
@@ -607,7 +607,7 @@ def download_table(request):
                 tb_ATU = Tbatuhandover.objects.all()
                 print(tb_ATU)
                 ATU_lenth = len(tb_ATU)
-                return render_to_response("download.html", {"ATU_table": tb_ATU, 'tb_Name': 'tbATUHandover','tb_length':ATU_lenth})
+                return render_to_response("download.html", {"ATU_table": tb_ATU, 'tb_Name': 'tbATUHandOver','tb_length':ATU_lenth})
             elif down_file == 'tbATUC2I':
                 tb_Adj = Tbatuc2I.objects.all()
                 print(tb_Adj)
