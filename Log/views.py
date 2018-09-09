@@ -83,9 +83,10 @@ def upload_tbCell(request):
     global bar_value
     if request.method == "POST":
         file_obj = request.FILES["up_file"]
-        type_excel = file_obj.name.split('.')[1]
+        type_excel = file_obj.name.split('.')[1].lower()
         print(type_excel)
-        name_excel = file_obj.name.split('.')[0]
+        name_excel = file_obj.name.split('.')[0].lower()
+        print(name_excel)
         print(file_obj.name)
         bar_value = 0.0
         if 'xlsx' == type_excel:
@@ -96,7 +97,7 @@ def upload_tbCell(request):
             successLines = 1
             workList = []
             failLines = 0
-            if 'tbOptCell' == name_excel:
+            if 'tboptcell' == name_excel:
                 for line in range(1, table.nrows):
                     row = table.row_values(line)
                     if row:  # 检查是否为空行
@@ -121,7 +122,7 @@ def upload_tbCell(request):
                         Tboptcell.objects.bulk_create(workList)
                         workList = []
                 Tboptcell.objects.bulk_create(workList)
-            elif 'tbKPI' == name_excel:
+            elif 'tbkpi' == name_excel:
                 print(table.nrows)
                 for line in range(1, table.nrows):
                     row = table.row_values(line)
@@ -207,7 +208,7 @@ def upload_tbCell(request):
                         # print("已插入到第n行")
                         Tbkpi.objects.bulk_create(workList)
                         workList = []
-            elif 'tbCell' == name_excel:
+            elif 'tbcell' == name_excel:
                 for line in range(1, table.nrows):
                     row = table.row_values(line)
                     if row:  # 检查是否为空行
@@ -261,7 +262,7 @@ def upload_tbCell(request):
                         bulk_re = Tbcell.objects.bulk_create(workList)
                         print(bulk_re)
                         workList = []
-            elif 'tbPRB' == name_excel:
+            elif 'tbprb' == name_excel:
                 for line in range(1, table.nrows):
                     row = table.row_values(line)
                     if row:  # 检查是否为空行
@@ -362,7 +363,7 @@ def upload_tbCell(request):
                         print(time3 - time2)
                         workList = []
                 Tbprb.objects.bulk_create(workList)
-            elif 'tbSecAdjcell' == name_excel:
+            elif 'tbsecadjcell' == name_excel:
                 for line in range(1, table.nrows):
                     row = table.row_values(line)
                     if row:  # 检查是否为空行
@@ -385,7 +386,7 @@ def upload_tbCell(request):
                         workList = []
         elif 'csv' == type_excel:
             print("csv")
-            if 'tbMROData' == name_excel:
+            if 'tbmrodata' == name_excel:
                 print("打开了MRO")
                 file = file_obj.read()
                 temp_data = file.decode('ascii', 'ignore')
@@ -437,6 +438,80 @@ def upload_tbCell(request):
                         workList = []
                         time1 = time.time()
                 Tbmrodata.objects.bulk_create(workList)
+        elif 'txt' == type_excel:
+            if 'tbprb' == name_excel:
+                print("打开了PRB.txt")
+                file = file_obj.read()
+                temp_data = file.decode('ascii', 'ignore')
+                #print(temp_data)
+                #print(type(temp_data))
+                #dataFile = StringIO(temp_data)
+                tb = open(temp_data)
+                count = 0
+                for i in tb:
+                    count += 1
+                print(count)
+                temp_data = file.decode('ascii', 'ignore')
+                #print(temp_data)
+                #print(type(temp_data))
+                #dataFile = StringIO(temp_data)
+                table = open(temp_data)
+                print("读取文件结束，准备导入！")
+                #print(type(table))
+                #print(table)
+                successLines = 1
+                workList = []
+                next(table)
+                failLines = 0
+                time1 = time.time()
+                print(count)
+                for row in table:
+                    row = line.split("\t")
+                    date = datetime.strptime(row[0], "%m/%d/%Y %X")
+                    row[5:105] = list(map(eval, row[5:105]))
+                    workList.append(Tbprb(starttime=date, turnround=row[1], name=row[2], cell=row[3],
+                                          cell_name=row[4],
+                                          prb0=row[5], prb1=row[6], prb2=row[7], prb3=row[8],
+                                          prb4=row[9], prb5=row[10], prb6=row[11], prb7=row[12],
+                                          prb8=row[13], prb9=row[14], prb10=row[15], prb11=row[16],
+                                          prb12=row[17], prb13=row[18], prb14=row[19], prb15=row[20],
+                                          prb16=row[21], prb17=row[22], prb18=row[23], prb19=row[24],
+                                          prb20=row[25], prb21=row[26], prb22=row[27], prb23=row[28],
+                                          prb24=row[29], prb25=row[30], prb26=row[31], prb27=row[32],
+                                          prb28=row[33], prb29=row[34], prb30=row[35], prb31=row[36],
+                                          prb32=row[37], prb33=row[38], prb34=row[39], prb35=row[40],
+                                          prb36=row[41], prb37=row[42], prb38=row[43], prb39=row[44],
+                                          prb40=row[45], prb41=row[46], prb42=row[47], prb43=row[48],
+                                          prb44=row[49], prb45=row[50], prb46=row[51], prb47=row[52],
+                                          prb48=row[53], prb49=row[54], prb50=row[55], prb51=row[56],
+                                          prb52=row[57], prb53=row[58], prb54=row[59], prb55=row[60],
+                                          prb56=row[61], prb57=row[62], prb58=row[63], prb59=row[64],
+                                          prb60=row[65], prb61=row[66], prb62=row[67], prb63=row[68],
+                                          prb64=row[69], prb65=row[70], prb66=row[71], prb67=row[72],
+                                          prb68=row[73], prb69=row[74], prb70=row[75], prb71=row[76],
+                                          prb72=row[77], prb73=row[78], prb74=row[79], prb75=row[80],
+                                          prb76=row[81], prb77=row[82], prb78=row[83], prb79=row[84],
+                                          prb80=row[85], prb81=row[86], prb82=row[87], prb83=row[88],
+                                          prb84=row[89], prb85=row[90], prb86=row[91], prb87=row[92],
+                                          prb88=row[93], prb89=row[94], prb90=row[95], prb91=row[96],
+                                          prb92=row[97], prb93=row[98], prb94=row[99], prb95=row[100],
+                                          prb96=row[101], prb97=row[102], prb98=row[103], prb99=row[104],
+                                          ))
+                    successLines = successLines + 1
+                    if successLines % 10000 == 0:  # 每五行进行一次插入
+                        time2 = time.time()
+                        bar_value = successLines / count
+                        print("绑定列属性用时")
+                        print(time2 - time1)
+                        print("已插入到")
+                        print(successLines)
+                        Tbprb.objects.bulk_create(workList)
+                        time3 = time.time()
+                        print("写入数据库用时")
+                        print(time3 - time2)
+                        workList = []
+                        time1 = time.time()
+                Tbprb.objects.bulk_create(workList)
         else:
             return render_to_response("uploadtbCell.html")
         bar_value = 1.0
@@ -718,7 +793,22 @@ def analyse_3cell(request):
             x = af.cleaned_data["x"]
             print(x)
             if x <= 1:
-                cursor.execute('exec proc_C2I3 %s', (x,))
+                cursor.execute('truncate table tbC2I3 insert into tbC2I3 '
+                               'select  S.SCELL as S_SCELL,S.NCELL as R_SCELL,T.SCELL as T_SCELL '
+                               'from tbC2INew as T,tbC2INew as S,tbC2INew as R '
+                               'where ((T.Scell=R.NCELL and R.SCELL=S.NCELL and S.SCELL=T.NCELL)'
+                               'or (s.scell=t.ncell and s.ncell=r.ncell and t.scell=r.scell)'
+                               'or (s.scell=r.scell and s.ncell=t.ncell and t.scell=r.ncell) '
+                               'or (s.scell=r.ncell and s.ncell=t.ncell and t.scell=r.scell)) '
+                               'and T.PrbABS6>=%s and R.PrbABS6>=%s and S.PrbABS6>=%s '
+                               'union '
+                               'select  S.SCELL as S_SCELL,S.NCELL as R_SCELL,T.NCELL as T_SCELL '
+                               'from tbC2INew as T,tbC2INew as S,tbC2INew as R '
+                               'where ((T.SCELL=S.NCELL and R.NCELL=S.SCELL and R.Scell=T.Ncell) '
+                               'or(s.scell=T.scell and s.ncell=r.scell and t.NCELL=r.ncell) '
+                               'or(s.scell=t.scell and s.ncell=r.ncell and t.ncell=r.scell) '
+                               'or(s.scell=r.scell and s.ncell=t.scell and t.ncell=r.ncell))'
+                               'and T.PrbABS6>=%s and R.PrbABS6>=%s and S.PrbABS6>=%s', (x, x, x, x, x, x))
                 print("完成三元组分析")
                 #data = Tbc2I3.objects.all()
                 #print(data)
