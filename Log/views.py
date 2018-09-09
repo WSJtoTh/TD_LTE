@@ -11,6 +11,8 @@ from Log.models import Tbatuhandover
 from Log.models import Tbadjcell
 from Log.models import Tbprbnew
 from Log.models import Tbc2Inew
+from Log.models import Tbatuc2I
+from Log.models import Tbc2I3
 import time
 import datetime
 import xlrd
@@ -1004,7 +1006,7 @@ def download_preview(request):
                 result = []
                 row = {'s_sector_id': '', 'n_sector_id': '', 's_earfcn': '', 'n_earfcn': ''}
                 count = 0
-                for x in tb_ATU:
+                for x in tb_Adj:
                     row['s_sector_id'] = x[0]
                     row['n_sector_id'] = x[1]
                     row['s_earfcn'] = x[2]
@@ -1034,7 +1036,7 @@ def download_table(request):
                 ATU_lenth = len(tb_ATU)
                 return render_to_response("download.html", {"ATU_table": tb_ATU, 'tb_Name': 'tbATUHandover','tb_length':ATU_lenth})
             elif down_file == 'tbAdjCell':
-                tb_Adj = Tbadjcell.objects.all()
+                tb_Adj = Tbatuc2I.objects.all()
                 print(tb_Adj)
                 Adj_lenth=len(tb_Adj)
                 return render_to_response("download.html", {"Adj_table": tb_Adj, 'tb_Name': 'tbAdjCell','tb_length':Adj_lenth})
@@ -1121,44 +1123,15 @@ def compute_C2Inew():
     cursor.execute("exec create_C2INew")
     #data = cursor.fetchall()
     print("执行完存储过程了")
-    """
-     data = Tbmrodata.objects.raw('select *,'
-                                 'avg((LteScRSRP-LteNcRSRP)*1.000) as C2I_mean,'
-                                 'round(stdev(LteScRSRP-LteNcRSRP),6) as std '
-                                 'from tbMROData '
-                                 'group by ServingSector,InterferingSector'
-                                 'having count(ServingSector)>100')
-    cursor.execute('select *,'
-                   'avg((LteScRSRP-LteNcRSRP)*1.000) as C2I_mean,'
-                   'round(stdev(LteScRSRP-LteNcRSRP),6) as std '
-                   'from tbMROData '
-                   'group by ServingSector,InterferingSector'
-                   'having count(ServingSector)>100')
-    """
-    """
-    workList = []
-    successLines = 0
-    for x in data:
-        print(x.C2I_mean)
-        prbc2i9 = norm(x.C2I_mean, x.std, 9)
-        prbc2i6 = norm(x.C2I_mean, x.std, 6)
-        workList.append(Tbc2Inew(scell=x.servingsector, ncell=interferingsector, c2i_mean=x.C2I_mean, std=x.std,
-                                 prbc2i9=prbc2i9, prbc2i6=prbc2i6))
-        successLines = successLines + 1
-        if successLines % 500 == 0:  # 每五行进行一次插入
-            print("已插入到")
-            print(successLines)
-            # print("已插入到第n行")
-            Tbc2inew.objects.bulk_create(workList)
-            workList = []
-    Tbc2inew.objects.bulk_create(workList)
-    """
 
 
 class AnalyseForm(forms.Form):
     x = forms.FloatField()
 
 
+"""
+控制用户输入的x
+"""
 def analyse_3cell(request):
     cursor = connection.cursor()
     if request.method == "POST":
@@ -1166,24 +1139,33 @@ def analyse_3cell(request):
         if af.is_valid():
             x = af.cleaned_data["x"]
             print(x)
-            cursor.execute('exec proc_C2I3 %s', (x,))
-            print("完成三元组分析")
-            cursor.execute('select * from tbC2I3')
-            tbC2I3 = cursor.fetchall()
-            # print(tbC2I3)
-            result = []
-            row = {'a_id': '', 'b_id': '', 'c_id': ''}
-            count = 0
-            for x in tbC2I3:
-                row['a_id'] = x[0]
-                row['b_id'] = x[1]
-                row['c_id'] = x[2]
-                result.append(row)
-                count = count + 1
+            if x <= 1:
+                cursor.execute('exec proc_C2I3 %s', (x,))
+                print("完成三元组分析")
+                #data = Tbc2I3.objects.all()
+                #print(data)
+                cursor.execute('select * from tbC2I3')
+                tbC2I3 = cursor.fetchall()
+                # print(tbC2I3)
+                result = []
+                row = {'a_id': '', 'b_id': '', 'c_id': ''}
+                count = 0
+                print(tbC2I3)
+                for x in tbC2I3:
+                    row['a_id'] = x[0]
+                    row['b_id'] = x[1]
+                    row['c_id'] = x[2]
+                    print("x")
+                    print(x)
+                    result.append(row)
+                    count = count + 1
+
                 print(result)
-            print("共有三元组")
-            print(count)
-            return render_to_response("analy3cell.html", {"triTuple:": result, "count": count})
+                print("共有三元组")
+                print(count)
+                return render_to_response("analy3cell.html", {"triTuple:": result, "count": count})
+            else:
+                return render_to_response("analy3cell.html")
     return render_to_response("analy3cell.html")
 
 

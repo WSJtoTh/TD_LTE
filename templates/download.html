@@ -182,9 +182,12 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
                     <option value="tbAdjCell" />
                 </datalist>
 
-                <button type="submit" id="okTable" onclick="getTable()">确认</button>
+                <button type="submit" id="okTable" onclick="getTable()">预览</button>
             </form>
-
+            <form action="/download/" method="post">
+                        <input type="hidden" name="down_file" value={{ tb_Name }} >
+                        <button type="submit" id="excel" onclick="getTablebyName()">确认下载</button>
+                    </form>
 		</div>	
 		<div class="save">
 	<!--	<input type="text" name="src" id="fileSrc" placeholder="文件路径...">
@@ -199,12 +202,7 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
 
 			<div class="box">
 				<div>
-                    <form action="/download/" method="post">
-                        <input readonly = True name="down_file" value={{ tb_Name }}>
-                        <button type="submit" id="excelBtn" onclick="getTablebyName()">导出Excel</button>
-                    </form>
-
-
+						<button type="button" id="excelBtn">导出Excel</button>
 				</div>
 				<a href="#" onclick="insertRow()"> insert</a>
 				<div id="myDiv">
@@ -249,12 +247,24 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
                             <th>S_EARFCN</th>
                             <th>N_EARFCN</th>
                         </tr>
+                    <!--
+                    <td>{{data.sector_id }}</td>
+                                <td>{{data.ncell_id}}</td>
+								<td>{{data.ratio_all}}</td>
+								<td>{{data.rank}}</td>
+                                <td>>{{data.costie}}</td>
+                                s_sector_id = models.CharField(db_column='S_SECTOR_ID', primary_key=True, max_length=50)  # Field name made lowercase.
+    n_sector_id = models.CharField(db_column='N_SECTOR_ID', max_length=50)  # Field name made lowercase.
+    s_earfcn = models.IntegerField(db_column='S_EARFCN', blank=True, null=True)  # Field name made lowercase.
+    n_earfcn
+                    -->
 						{% for data in Adj_table %}
 							<tr>
-								<td>{{data.s_sector_id }}</td>
-                                <td>{{data.n_sector_id}}</td>
-								<td>{{data.s_earfcn}}</td>
-								<td>{{data.n_earfcn}}</td>
+								<td>{{data.sector_id }}</td>
+                                <td>{{data.ncell_id}}</td>
+								<td>{{data.ratio_all}}</td>
+								<td>{{data.rank}}</td>
+                                <td>>{{data.costie}}</td>
 							</tr>
 						{% empty %}
 								<p>表中无数据</p>
