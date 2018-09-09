@@ -1024,6 +1024,7 @@ def download_table(request):
         df = DownloadForm(request.POST)
         if df.is_valid():
             down_file = df.cleaned_data["down_file"]
+            print(down_file)
             if down_file == 'tbOptCell':
                 tb_Opt = Tboptcell.objects.all()
                 Opt_lenth = len(tb_Opt)
@@ -1035,11 +1036,11 @@ def download_table(request):
                 print(tb_ATU)
                 ATU_lenth = len(tb_ATU)
                 return render_to_response("download.html", {"ATU_table": tb_ATU, 'tb_Name': 'tbATUHandover','tb_length':ATU_lenth})
-            elif down_file == 'tbAdjCell':
-                tb_Adj = Tbatuc2I.objects.all()
-                print(tb_Adj)
-                Adj_lenth=len(tb_Adj)
-                return render_to_response("download.html", {"Adj_table": tb_Adj, 'tb_Name': 'tbAdjCell','tb_length':Adj_lenth})
+            elif down_file == 'tbATUC2I':
+                tb_ATUC2I = Tbatuc2I.objects.all()
+                print(tb_ATUC2I)
+                ATUC2I_lenth=len(tb_ATUC2I)
+                return render_to_response("download.html", {"ATUC2I_table": tb_ATUC2I, 'tb_Name': 'tbATUC2I','tb_length':ATUC2I_lenth})
 
     return render_to_response("download.html")
 

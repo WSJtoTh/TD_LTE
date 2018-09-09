@@ -6,8 +6,8 @@ html *{
 	body{
 		/*background-image: url(img/bg.jpg);*/
 		background-color: white;
-		margin:0;
-
+		top:-10px;
+		height:100%;
 	}
 	/*
 	.imgon {
@@ -26,36 +26,46 @@ html *{
 		width: 100px;
 		left: 10px;
 		top: 20px;
-		
+
 	}
-	
+
 	.nav *{
 		text-decoration:none;
 		font-size:9pt;
 		z-index: 10;
-		
+
 	}
 	.nav * a:hover{
-		background-color:#82ce18;/* 鼠标经过时的红色背景，可自定义 */
+		background-color:#82ce18;/* ÃƒÂ©Ã‚Â¼Ã‚Â ÃƒÂ¦Ã‚Â Ã¢â‚¬Â¡ÃƒÂ§Ã‚Â»Ã‚ÂÃƒÂ¨Ã‚Â¿Ã¢â‚¬Â¡ÃƒÂ¦Ã¢â‚¬â€Ã‚Â¶ÃƒÂ§Ã…Â¡Ã¢â‚¬Å¾ÃƒÂ§Ã‚ÂºÃ‚Â¢ÃƒÂ¨Ã¢â‚¬Â°Ã‚Â²ÃƒÂ¨Ã†â€™Ã…â€™ÃƒÂ¦Ã¢â€žÂ¢Ã‚Â¯ÃƒÂ¯Ã‚Â¼Ã…â€™ÃƒÂ¥Ã‚ÂÃ‚Â¯ÃƒÂ¨Ã¢â‚¬Â¡Ã‚ÂªÃƒÂ¥Ã‚Â®Ã…Â¡ÃƒÂ¤Ã‚Â¹Ã¢â‚¬Â° */
 	}
+
+	.content{
+		/*position:fixed;*/
+		height:70px;
+		width:100%;
+		z-index:10;
+		background-color:black;
+	}
+
 	.menu{
 		z-index: 10;
-		position: fixed;
+		/*position: fixed;*/
 		height:70px;
 		width:100%;
 		background-color:black;
-		
-		
+
+
 	}
+
 	.nav{
 		list-style:none;
 		height:30px;
 		width:60%;
 		margin:0 auto;
-		background-color:black;	
+		background-color:black;
 		display: flex;
 		flex-flow: row wrap;
-		justify-content: space-around; 	
+		justify-content: space-around;
 	}
 	.nav li{
 		/*float:left;*/
@@ -78,8 +88,8 @@ html *{
 		blr:expression(this.onFocus=this.blur());
 		display:inline-block;
 	}
-	.nav li a:focus{ 
-		-moz-outline-style: none; 
+	.nav li a:focus{
+		-moz-outline-style: none;
 	}
 	.nav li .sub-nav{
 		position:absolute;
@@ -109,7 +119,7 @@ html *{
 	position: absolute;
 	width: 100px;
 	left: 85%;
-	
+
 	top: 10px;
 	color: white;
 
@@ -130,9 +140,10 @@ html *{
 
 
 .upload{
-	width: 100%;
-	top:100px;
-	height: 500px;
+	width: 70%;
+	margin:0 auto;
+	top:50px;
+	height: 400px;
 	position: relative;
 }
 .navi-list{
@@ -142,14 +153,15 @@ html *{
 }
 
 .active{
-	background-color: #C0C0C0; 
+	background-color: #C0C0C0;
 }
 .tableList{
 	float: left;
 	width: 300px;
-	height: 500px;
-	left: 10px;
-	top:100px;
+	height: 300px;
+
+	top:50px;
+	left:20%;
 	position: relative;
 	list-style: none;
 	display: flex;
@@ -160,13 +172,15 @@ html *{
 
 .tableList li{
 	width: 200px;
-	
+    list-style:none;
 }
 
 .chooseFile{
-	right: 30%;
-	
-	padding-left: 50px;
+
+	width:30%;
+	float:right;
+	right:10%;
+	position:relative;
 
 }
 
@@ -177,5 +191,5 @@ html *{
 
 .fileTitle{
 	text-align: center;
-	margin-bottom: 50px; 
+	margin-bottom: 50px;
 }

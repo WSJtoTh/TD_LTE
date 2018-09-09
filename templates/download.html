@@ -175,11 +175,11 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
 		<div class="chooseTable">
             <form action="/preview/" method="post">
                 <label>请选择需要导出的表格：</label>
-                <input type="text" id="txt_ide" list="ide" name="down_file"/>
+                <input type="text" id="txt_ide" list="ide" name="down_file" autocomplete="off"/>
                 <datalist id="ide">
                     <option value="tbATUHandOver" />
                     <option value="tbOptCell" />
-                    <option value="tbAdjCell" />
+                    <option value="tbATUC2I" />
                 </datalist>
 
                 <button type="submit" id="okTable" onclick="getTable()">预览</button>
@@ -205,7 +205,7 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
 				<div>
 						<button type="button" id="excelBtn">导出Excel</button>
 				</div>
-				<a href="#" onclick="insertRow()"> insert</a>
+
 				<div id="myDiv">
 					<table id="tableExcel"  border="1" >
 						<!-- caption元素可以生成表标题，其单元格列跨度为表格的列数 -->
@@ -223,7 +223,8 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
                 <td>567</td>
  
             </tr>-->
-             <p>共有{{ tb_length }}条数据</p>
+             <p>共有{{ tb_length }}条数据
+				 <p>名字{{tb_Name}}</p>
                 {% if tb_Name == "tbOptCell"%}
                         <caption>tbOptCell</caption>
                         <tr>
@@ -240,26 +241,16 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
 						{% empty %}
 								<p>表中无数据</p>
 						{% endfor%}
-                {% elif tb_Name == "tbAdjCell" %}
-                        <caption>tbAdjCell</caption>
+                {% elif tb_Name == "tbATUC2I" %}
+                        <caption>tbATUC2I</caption>
                         <tr>
-                            <th>S_SECTOR_ID</th>
-                            <th>N_SECTOR_ID</th>
-                            <th>S_EARFCN</th>
-                            <th>N_EARFCN</th>
+                            <th>SECTOR_ID</th>
+                            <th>NCELL_ID</th>
+                            <th>RATIO_ALL</th>
+							<th>RANK</th>
+                            <th>COSTIE</th>
                         </tr>
-                    <!--
-                    <td>{{data.sector_id }}</td>
-                                <td>{{data.ncell_id}}</td>
-								<td>{{data.ratio_all}}</td>
-								<td>{{data.rank}}</td>
-                                <td>>{{data.costie}}</td>
-                                s_sector_id = models.CharField(db_column='S_SECTOR_ID', primary_key=True, max_length=50)  # Field name made lowercase.
-    n_sector_id = models.CharField(db_column='N_SECTOR_ID', max_length=50)  # Field name made lowercase.
-    s_earfcn = models.IntegerField(db_column='S_EARFCN', blank=True, null=True)  # Field name made lowercase.
-    n_earfcn
-                    -->
-						{% for data in Adj_table %}
+						{% for data in ATUC2I_table %}
 							<tr>
 								<td>{{data.sector_id }}</td>
                                 <td>{{data.ncell_id}}</td>
@@ -273,25 +264,22 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
                 {% elif tb_Name == "tbATUHandover" %}
                         <caption>tbATUHandOver</caption>
                         <tr>
-                            <th>CITY</th>
-                            <th>SCELL</th>
-                            <th>NCELL</th>
+
+                            <th>SSECTOR_ID</th>
+                            <th>NSECTOR_ID</th>
                             <th>HOATT</th>
-							<th>HOSUCC</th>
-							<th>HOSUCCRATE</th>
+
                         </tr>
 						{% for data in ATU_table %}
 							<tr>
-								<td>{{data.city }}</td>
-                                <td>{{data.scell}}</td>
-								<td>{{data.ncell}}</td>
+								<td>{{ data.ssector_id }}</td>
+                                <td>{{ data.nsector_id }}</td>
 								<td>{{data.hoatt}}</td>
-								<td>{{data.hosucc}}</td>
-								<td>{{data.hosuccrate}}</td>
 							</tr>
 						{% empty %}
 								<p>表中无数据</p>
 						{% endfor%}
+
 
                 {% endif %}
 
@@ -313,6 +301,16 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
 
 </body>
 
+<script>
+	function getTable(){
+		var table_name=document.getElementById('txt_ide').value;
+		console.log(table_name);
+		if (table_name!="tbATUHandOver"&&table_name!="tbOptCell"&&table_name!="tbATUC2I")
+		{
+			alert("表名错误！");
+		}
+	}
+</script>
 
 <script>
 	document.getElementById('excelBtn').onclick = () => {
