@@ -34,5 +34,5 @@ urlpatterns = [
     url(r'^analy3cell/', views.analyse_3cell, name="analy3cellIndex"),
     url(r'^analyC2I/', views.analyse_C2I, name="analyC2IIndex"),
     #######################
-    url(r'^test/', views.import_table_from_excel)
+#    url(r'^test/', views.import_table_from_excel)
 ]
