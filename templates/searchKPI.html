@@ -99,8 +99,7 @@
 				<label>请选择属性：</label> 
 				<input type="text" id="txt_attr" list="attr" name="attr" autocomplete="off" />
 				<datalist id="attr"> 
-					<option value="小区信息" /> 
-					<option value="小区名称" /> 
+
 					<option value="RRC连接建立完成次数（无）" /> 
 					<option value="RRC连接建立完成次数（包括重发）" /> 
 					<option value="RRC建立成功率qf(%)" />
@@ -184,6 +183,7 @@
 			var result_list={{ result|safe }};
 			var length_list={{ length|safe }};
 			var date_list={{ dateList|safe}};
+			console.log(name);
 			console.log(attr);
 			console.log(result_list.length);
 			console.log(result_list);
