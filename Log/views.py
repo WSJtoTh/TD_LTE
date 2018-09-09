@@ -385,10 +385,21 @@ def upload_tbCell(request):
             print("csv")
             if 'tbMROData' == name_excel:
                 print("打开了MRO")
-                temp_data = file_obj.read().decode('ascii', 'ignore')
+                file = file_obj.read()
+                temp_data = file.decode('ascii', 'ignore')
                 print(temp_data)
                 print(type(temp_data))
                 dataFile = StringIO(temp_data)
+                tb = csv.reader(dataFile)
+                count = 0
+                for i in tb:
+                    count += 1
+                print(count)
+                temp_data = file.decode('ascii', 'ignore')
+                print(temp_data)
+                print(type(temp_data))
+                dataFile = StringIO(temp_data)
+                tb = csv.reader(dataFile)
                 table = csv.reader(dataFile)
                 print("读取文件结束，准备导入！")
                 print(type(table))
@@ -398,7 +409,8 @@ def upload_tbCell(request):
                 next(table)
                 failLines = 0
                 time1 = time.time()
-                print(len(table))
+
+                print(count)
                 for row in table:
                     #print(line)
                     #print(type(line ))
@@ -410,7 +422,7 @@ def upload_tbCell(request):
                                     )
                     successLines = successLines + 1
                     if successLines % 50000 == 0:  # 每五行进行一次插入
-                        bar_value = successLines / len(table)
+                        bar_value = successLines / count
                         time2 = time.time()
                         print("绑定列属性用时")
                         print(time2 - time1)
@@ -1049,12 +1061,13 @@ def download_data(request):
 def analyse_C2I(request):
     cursor = connection.cursor()
     print("准备分析")
-    tbC2I = Tbc2Inew.objects.values("scell").all()
-    print(type(tbC2I))
-    print(tbC2I)
-    if len(tbC2I) <= 0:
+    compute_C2Inew()
+    cursor.execute('select prbc2i9 from tbC2INew')
+    data = cursor.fetchone()
+    print(data[0])
+    if data[0] == None:
         print("C2Inew为空")
-        compute_C2Inew()
+
         print("计算完成")
         cursor.execute('select * from tbC2INew')
         data = cursor.fetchall()
@@ -1063,23 +1076,32 @@ def analyse_C2I(request):
             dict = tuple_to_c2i_dict(x)
             prbc2i9 = norm(dict['c2i_mean'], dict['std'], 9)
             prbc2i6 = norm(dict['c2i_mean'], dict['std'], 6)
-            print("prbc2i9")
-            print(prbc2i9)
-            print("prbc2i6")
-            print(prbc2i6)
+            if prbc2i9>1:
+                print("prbc2i9")
+                print(prbc2i9)
+            if prbc2i6>1:
+                print("prbc2i6")
+                print(prbc2i6)
+            if dict['scell'] == '253934-0' and dict['ncell'] == '253898-1':
+                print("出错行？？？")
+                print("prbc2i9")
+                print(prbc2i9)
+                print("prbc2i6")
+                print(prbc2i6)
+
             cursor.execute('update tbC2INew set prbc2i9 = %s,prbabs6 = %s '
                            'where SCELL= %s and NCELL= %s', (prbc2i9, prbc2i6, dict['scell'], dict['ncell']))
-    else:
-        cursor.execute('select * from tbC2INew')
-        data = cursor.fetchall()
-        print(data)
-        result = []
-        for x in data:
-            dict = tuple_to_c2i_dict(x)
-            result.append(dict)
-        #print(results)
-        return render_to_response("analyC2I.html", {'tbC2Inew': result})
-    return render_to_response("analyC2I.html")
+
+    cursor.execute('select * from tbC2INew')
+    data = cursor.fetchall()
+    print(data)
+    result = []
+    for x in data:
+        dict = tuple_to_c2i_dict(x)
+        result.append(dict)
+    #print(results)
+    return render_to_response("analyC2I.html", {'tbC2Inew': result})
+
 
 
 def tuple_to_c2i_dict(data):
