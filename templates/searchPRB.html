@@ -161,18 +161,20 @@
 		<div class="choose">
 			<div id="chooseName">
 				<label>请选择网元名称：</label> 
-				<input type="text" id="txt_name" list="name" name="name"/>
+				<input type="text" id="txt_name" list="name" name="name" autocomplete="off"/>
 				<datalist id="name"> 
-					<option value="三门峡连霍义马高速东-HLHF" />
-					<option value="南滨路" /> 
-					<option value="深度发觉" /> 
+					{% for name in Name_List %}
+    						<option value="{{name.name}}"></option>
+					{% empty %}
+							<option value="无数据"></option>
+					{% endfor %}
 				</datalist>
 
 			</div>
 			
 			<div id="chooseAttr">
 				<label>请选择属性：</label> 
-				<input type="text" id="txt_attr" list="attr" name="attr" />
+				<input type="text" id="txt_attr" list="attr" name="attr" autocomplete="off" />
 				<datalist id="attr"> 			
 
 				</datalist>
@@ -221,9 +223,7 @@
 				<input type="submit" name="submit" id="submitInfo" onclick="getInfo()">
 			</div>
             </form>
-        {% for prb in result %}
-            {{ prb }}<br/>
-        {% endfor %}
+
 			<div class="pic">
 				<div id="main" style="height:10px;width: 10px"></div>
 				<!--ECharts单文件引入 -->
@@ -239,7 +239,125 @@
 			</div>
 
 		</div>
+<script>
+			var attr={{ attr|safe }};
+			var name={{ name|safe }};
+			var result_list={{ result|safe }};
 
+			var date_list={{ dateList|safe}};
+			console.log(attr);
+			console.log(result_list.length);
+			console.log(result_list);
+			for(var i=0;i<result_list.length;i++)
+			{
+					console.log(result_list[i]);
+					console.log(date_list[i]);
+			}
+
+			//for(var i=0;i<10;i++)
+			//	console.log(result_list[i]);
+			//day_list=[];
+			/*for(var i=0;i<result_list.length;i++)
+			{
+					day_list.append(i);
+			}*/
+
+
+ var myChart = "";
+    // 路径配置
+    require.config({
+        paths: {
+            echarts: 'http://echarts.baidu.com/build/dist'
+        }
+    });
+
+    // 使用
+    require(
+        [
+            'echarts',
+            'echarts/chart/bar' // 使用柱状图就加载bar模块，按需加载
+        ],
+        function (ec) {
+            // 基于准备好的dom，初始化echarts图表
+            myChart = ec.init(document.getElementById('main'));
+
+
+            // 为echarts对象加载数据
+          //  myChart.setOption(option);
+
+        }
+    );
+
+     require.config({
+        paths: {
+            echarts: 'http://echarts.baidu.com/build/dist'
+        }
+    });
+
+    // 使用
+    require(
+        [
+            'echarts',
+            'echarts/chart/line' // 使用柱状图就加载bar模块，按需加载
+        ],
+        function (ec) {
+            // 基于准备好的dom，初始化echarts图表
+            var myChart = ec.init(document.getElementById('main2'));
+
+            var option1 = {
+                title : {
+                    text: 'PRB信息查询',
+                    subtext: name
+				},
+                tooltip : {
+                    trigger: 'axis'
+                },
+                legend: {
+                    data:[attr]
+                },
+                grid:{
+                    containLabel:true
+                },
+                calculable : true,
+                toolbox: {
+                    show : true,
+                    feature : {
+                        mark : {show: true},
+                        dataView : {show: true, readOnly: false},
+                        magicType : {show: true, type: ['line', 'bar']},
+                        restore : {show: true},
+                        saveAsImage : {show: true}
+                    }
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        data :  date_list
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        axisLabel : {
+                            formatter: '{value} '
+                        }
+                    }
+                ],
+                series : [
+                    {
+                         name:attr,
+                        type:'line',
+                        data:result_list,
+                    }
+                ]
+            };
+            // 为echarts对象加载数据
+            myChart.setOption(option1);
+        }
+    );
+
+</script>
 
 	</body>
 	</html>

@@ -1108,6 +1108,7 @@ def search_sql_PRB(request):
             attr = spf.cleaned_data["attr"]
             print(attr)
 
+
             results = Tbprbnew.objects.raw('select * from tbPRBNew where startTime '
                                            'between %s and %s and name = %s', [start, end, name])
 
@@ -1117,6 +1118,10 @@ def search_sql_PRB(request):
                 print(x.prb0)
             print(results)
             result = []
+            dateList = []
+            for x in results:
+                print(x.starttime)
+                dateList.append(str(x.starttime))
             for j in range(0, 99):
                 i = str(j)
                 if i in attr:
@@ -1423,7 +1428,10 @@ def search_sql_PRB(request):
                             result.append(x.prb99)
                     break
 
-            return render_to_response("searchPRB.html", {"result": result, "attr": attr})
+
+            return render_to_response("searchPRB.html", {"result": json.dumps(result), "attr": json.dumps(attr),
+                                       "Name_List": nameList,
+                                       "dateList": json.dumps(dateList),"name":json.dumps(name)})
 
     return render_to_response("searchPRB.html", {"Name_List": nameList})
 
@@ -1451,6 +1459,10 @@ def search_sql_KPI(request):
                                        'and cell = %s', [start, end, name])
             # result = Tbkpi.objects.filter(starttime__gt=start,
             #                              starttime__lt=end, name=name).values("cell_multi").all()
+            dateList = []
+            for x in results:
+                print(x.starttime)
+                dateList.append(str(x.starttime))
             print(results)
             #attr_str=str(attr)
             result=[]
@@ -1459,10 +1471,7 @@ def search_sql_KPI(request):
            # result_list=[]
 
             #print(type(result_list))
-            dateList = []
-            for x in results:
-                print(x.starttime)
-                dateList.append(str(x.starttime))
+
             if attr == 'RRC连接建立完成次数（无）':
                 for x in results:
                     result.append(x.suc_time)
