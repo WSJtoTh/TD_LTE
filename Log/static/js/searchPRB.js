@@ -9,7 +9,7 @@ window.onload = function(){
 loadattrs();
 }
 
-
+/*
 function getInfo(){
     var startTime;
     startTime=document.getElementById('startTime').value;
@@ -127,4 +127,4 @@ if (startTime==""||endTime==""||name==""||attr=="") {
         }
     );
 }
-    }
+    }*/
