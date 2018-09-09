@@ -180,18 +180,26 @@
 
 	<script>
 			var attr={{ attr|safe }};
+			var name={{ name|safe }};
 			var result_list={{ result|safe }};
 			var length_list={{ length|safe }};
+			var date_list={{ dateList|safe}};
 			console.log(attr);
 			console.log(result_list.length);
 			console.log(result_list);
-			//for(var i=0;i<10;i++)
-			//	console.log(result_list[i]);
-			day_list=[];
 			for(var i=0;i<result_list.length;i++)
 			{
-					day_list.append(i);
+					console.log(result_list[i]);
+					console.log(date_list[i]);
 			}
+
+			//for(var i=0;i<10;i++)
+			//	console.log(result_list[i]);
+			//day_list=[];
+			/*for(var i=0;i<result_list.length;i++)
+			{
+					day_list.append(i);
+			}*/
 
 
  var myChart = "";
@@ -238,8 +246,8 @@
             var option1 = {
                 title : {
                     text: 'KPI指标信息查询',
-                    subtext: 'xxx'
-                },
+                    subtext: name
+				},
                 tooltip : {
                     trigger: 'axis'
                 },
@@ -264,14 +272,14 @@
                     {
                         type : 'category',
                         boundaryGap : false,
-                        data : data_list
+                        data :  date_list
                     }
                 ],
                 yAxis : [
                     {
                         type : 'value',
                         axisLabel : {
-                            formatter: '{value} %'
+                            formatter: '{value} '
                         }
                     }
                 ],
