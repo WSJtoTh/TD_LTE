@@ -11,6 +11,7 @@ from Log.models import Tbatuhandover
 from Log.models import Tbadjcell
 from Log.models import Tbprbnew
 from Log.models import Tbc2Inew
+from Log.models import Tbc2I3
 import time
 import datetime
 import xlrd
@@ -903,7 +904,7 @@ def login(request):
 
 
 
-    return render_to_response("first.html")
+  #  return render_to_response("first.html")
 
 
 def user(request):
@@ -1044,38 +1045,6 @@ def compute_C2Inew():
     cursor.execute("exec create_C2INew")
     #data = cursor.fetchall()
     print("执行完存储过程了")
-    """
-     data = Tbmrodata.objects.raw('select *,'
-                                 'avg((LteScRSRP-LteNcRSRP)*1.000) as C2I_mean,'
-                                 'round(stdev(LteScRSRP-LteNcRSRP),6) as std '
-                                 'from tbMROData '
-                                 'group by ServingSector,InterferingSector'
-                                 'having count(ServingSector)>100')
-    cursor.execute('select *,'
-                   'avg((LteScRSRP-LteNcRSRP)*1.000) as C2I_mean,'
-                   'round(stdev(LteScRSRP-LteNcRSRP),6) as std '
-                   'from tbMROData '
-                   'group by ServingSector,InterferingSector'
-                   'having count(ServingSector)>100')
-    """
-    """
-    workList = []
-    successLines = 0
-    for x in data:
-        print(x.C2I_mean)
-        prbc2i9 = norm(x.C2I_mean, x.std, 9)
-        prbc2i6 = norm(x.C2I_mean, x.std, 6)
-        workList.append(Tbc2Inew(scell=x.servingsector, ncell=interferingsector, c2i_mean=x.C2I_mean, std=x.std,
-                                 prbc2i9=prbc2i9, prbc2i6=prbc2i6))
-        successLines = successLines + 1
-        if successLines % 500 == 0:  # 每五行进行一次插入
-            print("已插入到")
-            print(successLines)
-            # print("已插入到第n行")
-            Tbc2inew.objects.bulk_create(workList)
-            workList = []
-    Tbc2inew.objects.bulk_create(workList)
-    """
 
 
 class AnalyseForm(forms.Form):
@@ -1089,8 +1058,24 @@ def analyse_3cell(request):
         if af.is_valid():
             x = af.cleaned_data["x"]
             print(x)
-            cursor.execute('', (x))
-
+            cursor.execute('exec proc_C2I3 %s', (x, ))
+            print("完成三元组分析")
+            cursor.execute('select * from tbC2I3')
+            tbC2I3 = cursor.fetchall()
+            #print(tbC2I3)
+            result = []
+            row = {'a_id': '', 'b_id': '', 'c_id': ''}
+            count = 0
+            for x in tbC2I3:
+                row['a_id'] = x[0]
+                row['b_id'] = x[1]
+                row['c_id'] = x[2]
+                result.append(row)
+                count = count + 1
+                print(result)
+            print("共有三元组")
+            print(count)
+            return render_to_response("analy3cell.html", {"triTuple:": result,"count": count})
     return render_to_response("analy3cell.html")
 
 
@@ -1454,15 +1439,11 @@ def search_sql_KPI(request):
             print(results)
             #attr_str=str(attr)
             result=[]
-            #result_list = []
-            #result_list=list(results.objects.all())
-           # result_list=[]
-
-            #print(type(result_list))
             dateList = []
             for x in results:
                 print(x.starttime)
                 dateList.append(x.starttime)
+                print(type(dateList))
             if attr == 'RRC连接建立完成次数（无）':
                 for x in results:
                     result.append(x.suc_time)
