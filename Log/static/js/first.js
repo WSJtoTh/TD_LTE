@@ -7,6 +7,7 @@ function showLogDialog(){
    // g("loginBox").style.opacity = "1";
    g("loginBox").style.visibility = "visible";
     g("logimg").style.display = "block";
+     $('#Logtip').html("");
 
 }
  
@@ -29,9 +30,30 @@ function submitLogin(){
   var name=document.getElementById("LogUserName").value;
   var password=document.getElementById("LogPassword").value;
   console.log(name);
-  console.log(password);
-}
+  console.log(password);}
+ /* var List=JSON.parse('{{ logResult|safe }}');
+  for (i in List){
+       console.log(i);
+    }*/
+/*
+  $.ajax({
+    url:'/login/',
+    type:'POST',
+    data:{Logusername:name,Logpassword:password},
+    success:function(logResult){
+        var callback_dict=$.parseJSON(logResult);
+        if(callback_dict.status==0){
+            $('#Logtip').html("用户名或密码错误")
+        }
+        else if(callback_dict.status==1){
+            alert("登录成功!");
+            window.location.href="User.html";
+        }
 
+    }
+  })
+}
+*/
 function submitRegist(){
   var name=document.getElementById("RegUsername").value;
   var password=document.getElementById("RegPassword").value;

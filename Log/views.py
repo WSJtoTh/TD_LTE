@@ -831,7 +831,7 @@ def analyse_3cell(request):
                 print(result)
                 print("共有三元组")
                 print(count)
-                return render_to_response("analy3cell.html", {"triTuple:": result, "count": count})
+                return render_to_response("analy3cell.html", {"triTuple:": json.dumps(result), "count": json.dumps(count)})
             else:
                 return render_to_response("analy3cell.html")
     return render_to_response("analy3cell.html")
@@ -1225,22 +1225,22 @@ def search_sql_KPI(request):
             elif attr == 'RRC建立成功率qf(%)':
                 for x in results:
                     result.append(x.rrc_suc_rate)
-            elif attr == 'E-RAB建立成功总次数（无）':
+            elif attr =='E-RAB建立成功总次数 (无)':
                 for x in results:
                     result.append(x.suc_total)
-            elif attr == 'E-RAB建立尝试总次数（无）':
+            elif attr == 'E-RAB建立尝试总次数 (无)':
                 for x in results:
                     result.append(x.try_total)
             elif attr == 'E-RAB建立成功率2(%)':
                 for x in results:
                     result.append(x.e_rab_suc_rate)
-            elif attr == 'eNodeB触发的E-RAB异常释放总次数（无）':
+            elif attr == 'eNodeB触发的E-RAB异常释放总次数 (无)':
                 for x in results:
                     result.append(x.enodeb_exception)
-            elif attr == '小区切换出E-RAB异常释放总次数（无）':
+            elif attr == '小区切换出E-RAB异常释放总次数 (无)':
                 for x in results:
                     result.append(x.cell_exception)
-            elif attr == 'E-RAB掉线率（新）（%）':
+            elif attr == 'E-RAB掉线率(新)（%）':
                 for x in results:
                     result.append(x.e_rab_offline)
             elif attr == '无线接通率ay（%）':
@@ -1300,7 +1300,7 @@ def search_sql_KPI(request):
             elif attr == '小区PDCP层所接收到的上行数据的总吞吐量 (比特)':
                 for x in results:
                     result.append(x.af_field)
-            elif attr == '小区PDCP层所发送到的下行数据的总吞吐量':
+            elif attr == '小区PDCP层所发送到的下行数据的总吞吐量 (比特)':
                 for x in results:
                     result.append(x.ag_field)
             elif attr == 'RRC重建请求次数（无）':
