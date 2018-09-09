@@ -93,8 +93,19 @@
 								　　　　　　<th >主邻小区RSRP差值的标准差</th>
 								　　　　　　<th >主邻小区RSRP差值小于9的概率</th>
 								　　　　　　<th >主邻小区RSRP差值小于9的概率</th>
-							</tr>
-							
+								</tr>
+								{% for data in tbC2Inew %}
+								<tr>
+									<td>{{data.scell }}</td>
+									<td>{{data.ncell}}</td>
+									<td>{{data.c2i_mean}}</td>
+									<td>{{ data.std }}</td>
+									<td>{{ data.prbc2i9 }}</td>
+									<td>{{ data.prbabs6 }}</td>
+								</tr>
+								{% empty %}
+									<p>表中无数据</p>
+								{% endfor%}
 							
 						</tr>
 						<tr>
@@ -107,10 +118,8 @@
 					</table>
 				</div>
 			</div>
-{% for data in tbC2Inew %}
-    {{ data.scell }}    {{ data.ncell }}    {{ data.c2i_mean }}     {{ data.std }}      {{ data.prbc2i9 }}      {{ data.prbabs6 }} <br/>
 
-{% endfor %}
+
 		</div>
 	</div>
 

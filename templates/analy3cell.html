@@ -74,7 +74,7 @@
 		<div class="inputX">
             <form action="/analy3cell/" method="post">
                 <label>请输入参数X </label><input type="text" name="x" id="paraX">
-                <input type="submit" name="okX" id="okX" value="确认" onclick="getX()">
+                <input type="submit" name="okX" id="okX" value="确认" >
             </form>
 
 		</div>
@@ -85,6 +85,7 @@
 					<button type="button" id="excelBtn">导出Excel</button>
 
 				</div>
+				<p>共有{{ count }}个三元组</p>
 				<a href="#" onclick="insertRow()"> insert</a>
 				<div id="myDiv">
 					<table id="tableExcel"  border="1" >
@@ -97,13 +98,17 @@
 							<th rowspan="1">c小区ID</th>
 							
 						</tr>
-						<tr>
-							<td>123</td>
-							<td>345</td>
-							<td>567</td>
-							
-						</tr>
-						
+
+						<!--{% for data in triTuple %}
+							<tr>
+								<td>{{ data.a_id }}</td>
+								<td>{{ data.b_id }}</td>
+								<td>{{ data.c_id }}</td>
+							</tr>
+						{% empty %}
+							<p>表中无数据</p>
+						{% endfor%}-->
+
 					</table>
 				</div>
 			</div>
@@ -116,6 +121,17 @@
 
 
 </body>
+<script>
+	var data={{ triTuple|safe }};
+	var str = "";//定义用于拼接的字符串
+	for (var i = 0; i < data.length; i++) {
+            //拼接表格的行和列
+            str = "<tr><td>" + data[i].a_id + "</td><td>" + data[i].c_id + "</td><td>" + data[i].b_id+ "</td></tr>";
+            //追加到table中
+			$("#tableExcel").append(str);
+            }
+
+</script>
 
 <script>
 	document.getElementById('excelBtn').onclick = () => {
@@ -125,7 +141,7 @@
 		constructor() {
 			this.idTmr = null;
 			this.uri = 'data:application/vnd.ms-excel;base64,';
-			this.template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';      
+			this.template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="UTF-8"><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table>{table}</table></body></html>';
 		}
 		getBrowser() {
 			var explorer = window.navigator.userAgent;
@@ -198,6 +214,13 @@
         };
     }
     var exportExcel = new ExportExcel();
+
+
+	//展示数据
+
+
+
+
 </script>
 
 </html>

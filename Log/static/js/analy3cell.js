@@ -30,7 +30,7 @@ function insertRow(){
     z.innerHTML="3";
 
 }
-
+/*
 function getX(){
      $("#tableExcel  tr:not(:first)").html("");
     var x;
@@ -39,4 +39,4 @@ function getX(){
         alert("请输入x的值");
     }
     $("#cap").html("tbC2I3（x="+x+")");
-}
+}*/

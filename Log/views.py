@@ -1161,7 +1161,8 @@ def analyse_3cell(request):
                 print(result)
             print("共有三元组")
             print(count)
-            return render_to_response("analy3cell.html", {"triTuple:": result, "count": count})
+            #result_set=result.objects.filter(pk__in=[x.pk for x in result])
+            return render_to_response("analy3cell.html", {"triTuple":json.dumps(result), "count": count})
     return render_to_response("analy3cell.html")
 
 
