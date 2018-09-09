@@ -948,6 +948,61 @@ def datetime_transform(raw_datetime):
 
 #数据导出
 
+def download_preview(request):
+    cursor = connection.cursor()
+    if request.method == "POST":
+        df = DownloadForm(request.POST)
+        if df.is_valid():
+            down_file = df.cleaned_data["down_file"]
+            print("预览")
+            if down_file == 'tbOptCell':
+                cursor.execute('select top 100* from tbOptCell')
+                tb_Opt = cursor.fetchall()
+                # print(tbC2I3)
+                result = []
+                row = {'sector_id': '', 'earfcn': '', 'cell_type': ''}
+                count = 0
+                for x in tb_Opt:
+                    row['sector_id'] = x[0]
+                    row['earfcn'] = x[1]
+                    row['cell_type'] = x[2]
+                    result.append(row)
+                    count = count + 1
+                return render_to_response("download.html",
+                                          {"Opt_table": result, 'tb_Name': 'tbOptCell', 'tb_length': count})
+            elif down_file == 'tbATUHandOver':
+                cursor.execute('select top 100* from tbATUHandover')
+                tb_ATU = cursor.fetchall()
+                # print(tbC2I3)
+                result = []
+                row = {'ssector_id': '', 'nsector_id': '', 'hoatt': ''}
+                count = 0
+                for x in tb_ATU:
+                    row['sector_id'] = x[0]
+                    row['nsector_id'] = x[1]
+                    row['hoatt'] = x[2]
+                    result.append(row)
+                    count = count + 1
+                return render_to_response("download.html",
+                                          {"ATU_table": result, 'tb_Name': 'tbATUHandover', 'tb_length': count})
+            elif down_file == 'tbAdjCell':
+                cursor.execute('select top 100* from tbAdjCell')
+                tb_Adj = cursor.fetchall()
+                # print(tbC2I3)
+                result = []
+                row = {'s_sector_id': '', 'n_sector_id': '', 's_earfcn': '', 'n_earfcn': ''}
+                count = 0
+                for x in tb_ATU:
+                    row['s_sector_id'] = x[0]
+                    row['n_sector_id'] = x[1]
+                    row['s_earfcn'] = x[2]
+                    row['n_earfcn'] = x[3]
+                    result.append(row)
+                    count = count + 1
+                return render_to_response("download.html",
+                                          {"Adj_table": result, 'tb_Name': 'tbAdjCell', 'tb_length': count})
+
+    return render_to_response("download.html")
 
 
 def download_table(request):

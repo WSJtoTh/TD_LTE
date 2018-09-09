@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^user/', views.user, name="userIndex"),
     url(r'^bar/', views.progress_bar, name="barIndex"),
     url(r'^download/', views.download_table, name="downloadIndex"),
+    url(r'^preview/', views.download_preview, name="previewIndex"),
     url(r'^searchCell/', views.search_sql_cell, name="searchCellIndex"),
     url(r'^searchEnodeb/', views.search_sql_eNodeb, name="searchEnodebIndex"),
     url(r'^searchKPI/', views.search_sql_KPI, name="searchKPIIndex"),
