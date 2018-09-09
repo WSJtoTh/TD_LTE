@@ -553,7 +553,10 @@ def download_preview(request):
                     row['earfcn'] = x[1]
                     row['cell_type'] = x[2]
                     result.append(row)
+                    print(row)
+                    row = {'sector_id': '', 'earfcn': '', 'cell_type': ''}
                     count = count + 1
+                print(result)
                 return render_to_response("download.html",
                                           {"Opt_table": result, 'tb_Name': 'tbOptCell', 'tb_length': count})
             elif down_file == 'tbATUHandOver':
@@ -568,6 +571,7 @@ def download_preview(request):
                     row['nsector_id'] = x[1]
                     row['hoatt'] = x[2]
                     result.append(row)
+                    row = {'ssector_id': '', 'nsector_id': '', 'hoatt': ''}
                     count = count + 1
                 return render_to_response("download.html",
                                           {"ATU_table": result, 'tb_Name': 'tbATUHandOver', 'tb_length': count})
@@ -585,6 +589,7 @@ def download_preview(request):
                     row['cosite'] = x[3]
                     row['rank'] = x[4]
                     result.append(row)
+                    row = {'sector_id': '', 'ncell_id': '', 'ratio_all': '', 'cosite': '', 'rank': ''}
                     count = count + 1
                 return render_to_response("download.html",
                                           {"ATUC2I_table": result, 'tb_Name': 'tbATUC2I', 'tb_length': count})
