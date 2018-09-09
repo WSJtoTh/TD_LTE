@@ -224,7 +224,7 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
  
             </tr>-->
              <p>共有{{ tb_length }}条数据
-				 <p>名字{{tb_Name}}</p>
+
                 {% if tb_Name == "tbOptCell"%}
                         <caption>tbOptCell</caption>
                         <tr>
@@ -274,7 +274,7 @@ $.get("{% url 'downloadIndex' %}", function(Opt_table)
 							<tr>
 								<td>{{ data.ssector_id }}</td>
                                 <td>{{ data.nsector_id }}</td>
-								<td>{{data.hoatt}}</td>
+								<td>{{ data.hoatt }}</td>
 							</tr>
 						{% empty %}
 								<p>表中无数据</p>
