@@ -1089,8 +1089,24 @@ def analyse_3cell(request):
         if af.is_valid():
             x = af.cleaned_data["x"]
             print(x)
-            cursor.execute('', (x))
-
+            cursor.execute('exec proc_C2I3 %s', (x,))
+            print("完成三元组分析")
+            cursor.execute('select * from tbC2I3')
+            tbC2I3 = cursor.fetchall()
+            # print(tbC2I3)
+            result = []
+            row = {'a_id': '', 'b_id': '', 'c_id': ''}
+            count = 0
+            for x in tbC2I3:
+                row['a_id'] = x[0]
+                row['b_id'] = x[1]
+                row['c_id'] = x[2]
+                result.append(row)
+                count = count + 1
+                print(result)
+            print("共有三元组")
+            print(count)
+            return render_to_response("analy3cell.html", {"triTuple:": result, "count": count})
     return render_to_response("analy3cell.html")
 
 
