@@ -1462,7 +1462,7 @@ def search_sql_KPI(request):
             dateList = []
             for x in results:
                 print(x.starttime)
-                dateList.append(x.starttime)
+                dateList.append(str(x.starttime))
             if attr == 'RRC连接建立完成次数（无）':
                 for x in results:
                     result.append(x.suc_time)
@@ -1582,7 +1582,7 @@ def search_sql_KPI(request):
             return render_to_response("searchKPI.html",
                                       {"result": json.dumps(result), "attr": json.dumps(attr),
                                        "length":json.dumps(result_count), "Name_List": nameList,
-                                       "dateList": json.dumps(dateList)})
+                                       "dateList": json.dumps(dateList),"name":json.dumps(name)})
         else:
             return render_to_response("searchKPI.html", {"Name_List": nameList})
     return render_to_response("searchKPI.html", {"Name_List": nameList})
