@@ -587,7 +587,7 @@ def download_preview(request):
                     result.append(row)
                     count = count + 1
                 return render_to_response("download.html",
-                                          {"Adj_table": result, 'tb_Name': 'tbATUC2I', 'tb_length': count})
+                                          {"ATUC2I_table": result, 'tb_Name': 'tbATUC2I', 'tb_length': count})
 
     return render_to_response("download.html")
 
@@ -612,7 +612,7 @@ def download_table(request):
                 tb_Adj = Tbatuc2I.objects.all()
                 print(tb_Adj)
                 Adj_lenth=len(tb_Adj)
-                return render_to_response("download.html", {"Adj_table": tb_Adj, 'tb_Name': 'tbATUC2I', 'tb_length':Adj_lenth})
+                return render_to_response("download.html", {"ATUC2I_table": tb_Adj, 'tb_Name': 'tbATUC2I', 'tb_length':Adj_lenth})
 
     return render_to_response("download.html")
 
