@@ -162,7 +162,7 @@ html *{
 
 
 #tableExcel{
-	width: 350px;
+	width: 100%;
 	overflow: scroll;
 	margin-top: 50px; 
 	border-collapse: collapse;
