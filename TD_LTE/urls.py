@@ -31,7 +31,7 @@ urlpatterns = [
     url(r'^searchEnodeb/', views.search_sql_eNodeb, name="searchEnodebIndex"),
     url(r'^searchKPI/', views.search_sql_KPI, name="searchKPIIndex"),
     url(r'^searchPRB/', views.search_sql_PRB, name="searchPRBIndex"),
-    url(r'^analy3cell/', views.analyse_3cell, name="analy3cellIndex"),
+    url(r'^analy3cell/', views.analyse_python_3cell, name="analy3cellIndex"),
     url(r'^analyC2I/', views.analyse_C2I, name="analyC2IIndex"),
     #######################
 #    url(r'^test/', views.import_table_from_excel)

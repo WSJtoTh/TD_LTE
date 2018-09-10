@@ -781,6 +781,131 @@ def compute_C2Inew():
 class AnalyseForm(forms.Form):
     x = forms.FloatField()
 
+def tuple_to_list_c2inew(data):
+    result = []
+    for i in range(0, 6):
+        result.append(data[i])
+    return result
+
+
+def analyse_python_3cell(request):
+    if request.method == "POST":
+        af = AnalyseForm(request.POST)
+        if af.is_valid():
+            x = af.cleaned_data["x"]
+            print(x)
+            result, count = compute_3cell_python(x)
+            return render_to_response("analy3cell.html", {"triTuple": result, "count": count})
+    return render_to_response("analy3cell.html")
+
+
+def compute_3cell_python(x):
+    cursor = connection.cursor()
+    cursor.execute('select * from tbC2Inew')
+    data = cursor.fetchall()
+    C2IList = []
+    scellList = []
+    ncellList = []
+    indexList = []
+    count = 0
+    for y in data:
+        temp = tuple_to_list_c2inew(y)
+        C2IList.append(temp)
+        if y[0] not in scellList:
+            scellList.append(y[0])
+        if y[1] not in ncellList:
+            ncellList.append(y[1])
+        indexList.append(count)
+        count += 1
+    print(C2IList)
+    print(scellList)
+    print(C2IList[0][5])  ##可以用双重list来实现随机存取的二维数组
+    print(indexList)
+    row = {'a_id': '', 'b_id': '', 'c_id': ''}
+    result = []
+    re_count = 0
+    for scell in scellList:
+        for ii in range(0, count - 1):
+            i = ii
+            if C2IList[i][0] == scell and i in indexList:  # 从第一行到最后一行遍历
+                indexList, delete = get_tuple(scell, C2IList[i][1], C2IList, indexList, count - 1, x)
+                print("第i层")
+                print(indexList)
+                if delete:  # (a , b)满足条件\
+                    ncell = C2IList[i][1]
+                    for jj in range(0, count - 1):
+                        j = jj
+                        if j in indexList and ncell == C2IList[j][0]:  # 以scel作为中间元素寻找c
+                            indexList, delete = get_tuple(scell, C2IList[j][1], C2IList, indexList, count - 1, x)
+                            print("第j层")
+                            print(indexList)
+                            if delete:
+                                row['a_id'] = scell
+                                row['b_id'] = C2IList[i][1]
+                                row['c_id'] = C2IList[j][1]
+                                result.append(row)
+                                row = {'a_id': '', 'b_id': '', 'c_id': ''}
+                                re_count += 1
+                    for kk in range(0, count - 1):
+                        k = kk
+                        if k in indexList and ncell == C2IList[k][0]:  # 以ncell作为中间元素寻找c
+                            indexList, delete = get_tuple(ncell, C2IList[k][1], C2IList, indexList, count - 1, x)
+                            print("第k层")
+                            print(indexList)
+                            if delete:
+                                row['a_id'] = scell
+                                row['b_id'] = ncell
+                                row['c_id'] = C2IList[k][1]
+                                result.append(row)
+                                re_count += 1
+                                row = {'a_id': '', 'b_id': '', 'c_id': ''}
+    print("三元组：")
+    print(result)
+    print("共有三元组：")
+    print(re_count)
+    final_result = []
+    final_count = 0
+    for z in result:
+        if z not in final_result:
+            final_result.append(z)
+            final_count += 1
+    print("去重三元组：")
+    print(final_result)
+    print("共有去重三元组：")
+    print(final_count)
+
+    return final_result, final_count
+
+
+def get_tuple(scell, ncell, List, indexList, count, x):
+    delete = False
+    for ii in range(0, count):
+        i = ii
+        if i in indexList:
+            if scell == List[i][0] and ncell == List[i][1]:
+                print(i)
+                print(type(List[0][5]))
+                print(type(x))
+                if List[i][5] >= x:
+                    indexList.remove(i)
+                    delete = True
+                    for jj in range(0, count):
+                        j = jj
+                        if j in indexList:
+                            if ncell == List[j][0] and scell == List[j][1]:
+                                indexList.remove(j)
+                else:
+                    for jj in range(0, count):
+                        j = jj
+                        if j in indexList:
+                            if ncell == List[j][0] and scell == List[j][1]:
+                                if List[j][5] >= x:
+                                    indexList.remove(j)
+                                    indexList.remove(i)
+                                    delete = True
+    return indexList, delete
+
+
 
 """
 控制用户输入的x
@@ -806,7 +931,7 @@ def analyse_3cell(request):
                                'from tbC2INew as T,tbC2INew as S,tbC2INew as R '
                                'where ((T.SCELL=S.NCELL and R.NCELL=S.SCELL and R.Scell=T.Ncell) '
                                'or(s.scell=T.scell and s.ncell=r.scell and t.NCELL=r.ncell) '
-                               'or(s.scell=t.scell and s.ncell=r.ncell and t.ncell=r.scell) '
+                               'or(s.scell=t.scell and s.ncell=r.ncell and t.ncell=r.scell) ' 
                                'or(s.scell=r.scell and s.ncell=t.scell and t.ncell=r.ncell))'
                                'and T.PrbABS6>=%s and R.PrbABS6>=%s and S.PrbABS6>=%s', (x, x, x, x, x, x))
                 print("完成三元组分析")
