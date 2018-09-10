@@ -7,7 +7,9 @@
 		/*background-image: url(img/bg.jpg);*/
 		background-color: white; 
 		padding:0px;
-		margin: 0px; 
+		margin: 0px;
+		background-image: url(img/bg2.jpg);
+		background-size: cover;
 	}
 
 	.content{

@@ -81,7 +81,9 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 def upload_tbCell(request):
     global bar_value
+    error = 1
     if request.method == "POST":
+
         file_obj = request.FILES["up_file"]
         type_excel = file_obj.name.split('.')[1].lower()
         print(type_excel)
@@ -384,6 +386,8 @@ def upload_tbCell(request):
                         # print("已插入到第n行")
                         Tbsecadjcell.objects.bulk_create(workList)
                         workList = []
+            else:
+                    error=0#文件错误
         elif 'csv' == type_excel:
             print("csv")
             if 'tbmrodata' == name_excel:
@@ -438,6 +442,8 @@ def upload_tbCell(request):
                         workList = []
                         time1 = time.time()
                 Tbmrodata.objects.bulk_create(workList)
+            else:
+                error=0
         elif 'txt' == type_excel:
             if 'tbprb' == name_excel:
                 print("打开了PRB.txt")
@@ -512,11 +518,14 @@ def upload_tbCell(request):
                         workList = []
                         time1 = time.time()
                 Tbprb.objects.bulk_create(workList)
+            else:
+                error=0
         else:
-            return render_to_response("uploadtbCell.html")
+            error=0
+            return render_to_response("uploadtbCell.html",{"error": json.dumps(error)})
         bar_value = 1.0
-        return render_to_response("uploadtbCell.html")
-    return render_to_response("uploadtbCell.html")
+        return render_to_response("uploadtbCell.html",{"error": json.dumps(error)})
+    return render_to_response("uploadtbCell.html",{"error": json.dumps(error)})
 
 
 ###############

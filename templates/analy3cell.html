@@ -73,8 +73,8 @@
 		</h3>
 		<div class="inputX">
             <form action="/analy3cell/" method="post">
-                <label>请输入参数X </label><input type="text" name="x" id="paraX">
-                <input type="submit" name="okX" id="okX" value="确认" >
+                <label>请输入参数X </label><input type="text" name="x" id="paraX" >
+                <input type="submit" name="okX" id="okX" value="确认" onclick="getX()" >
             </form>
 
 		</div>
@@ -121,6 +121,18 @@
 
 
 </body>
+<script>
+	function getX()
+	{
+		console.log("执行了");
+		x=document.getElementById('paraX').value;
+		console.log(x);
+		if(x<0||x>1)
+		{
+			alert("x的值必须在0-1之间！");
+		}
+	}
+</script>
 <script>
 	var data={{ triTuple|safe }};
 	var str = "";//定义用于拼接的字符串

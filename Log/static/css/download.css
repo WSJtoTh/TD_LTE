@@ -6,6 +6,8 @@ html *{
 	body{
 		/*background-image: url(img/bg.jpg);*/
 		background-color: white;
+		background-image: url(img/bg2.jpg);
+		background-size: cover;
 	}
 	/*
 	.imgon {

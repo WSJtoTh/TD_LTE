@@ -8,6 +8,8 @@ html *{
 		background-color: white;
 		top:-10px;
 		height:100%;
+		background-image: url(img/bg2.jpg);
+		background-size: cover;
 	}
 	/*
 	.imgon {
@@ -190,6 +192,9 @@ html *{
 	width: 400px;
 }
 
+#OurProgress{
+	margin:0 auto;
+}
 
 .fileTitle{
 	text-align: center;
